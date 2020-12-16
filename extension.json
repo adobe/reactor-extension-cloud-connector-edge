@@ -1,0 +1,71 @@
+{
+  "displayName": "Adobe Cloud Connector",
+  "name": "adobe-cloud-connector",
+  "iconPath": "resources/icons/cloud-connector.svg",
+  "version": "1.0.0",
+  "description": "Server side extension that allows users to send data to 3rd party external sources.",
+  "author": {
+    "name": "Adobe Systems",
+    "url": "http://adobe.com",
+    "email": "reactor@adobe.com"
+  },
+  "platform": "edge",
+  "viewBasePath": "dist/",
+  "actions": [
+    {
+      "name": "send-data",
+      "displayName": "Make Fetch Call",
+      "libPath": "src/lib/actions/sendData.js",
+      "viewPath": "actions/sendData.html",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "https?:\\/\\/[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]+\\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)"
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": ["key", "name"]
+          },
+          "body": {
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "responseKey": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": ["method", "url"]
+      }
+    }
+  ]
+}
