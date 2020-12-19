@@ -5,3 +5,4 @@ dist
 .sandbox
 .entries
 adobe-reactor-extension-cloud-connector-edge-*.tgz
+package-adobe-cloud-connector-*.zip

@@ -6,3 +6,4 @@ adobe-reactor-extension-cloud-connector-edge-*.tgz
 coverage
 jest.config.js
 webpack.config.js
+package-adobe-cloud-connector-*.zip
