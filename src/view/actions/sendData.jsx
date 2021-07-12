@@ -11,8 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import React, { useState } from 'react';
-import { Tabs } from '@react-spectrum/tabs';
-import { Item, View } from '@adobe/react-spectrum';
+import { Item, View, TabList, TabPanels, Tabs } from '@adobe/react-spectrum';
 
 import ExtensionView from '../components/extensionView';
 
@@ -72,33 +71,40 @@ export default () => {
           <RequestsFields />
 
           <Tabs selectedKey={selectedTab} onSelectionChange={setSelectedTab}>
-            <Item title="Query Params" key="queryParams">
-              <View
-                paddingStart="size-200"
-                paddingEnd="size-200"
-                paddingBottom="size-200"
-              >
-                <QueryParamsFields />
-              </View>
-            </Item>
-            <Item title="Headers" key="headers">
-              <View
-                paddingStart="size-200"
-                paddingEnd="size-200"
-                paddingBottom="size-200"
-              >
-                <HeadersFields />
-              </View>
-            </Item>
-            <Item title="Body" key="body">
-              <View
-                paddingStart="size-200"
-                paddingEnd="size-200"
-                paddingBottom="size-200"
-              >
-                <BodyFields />
-              </View>
-            </Item>
+            <TabList>
+              <Item key="queryParams">Query Params</Item>
+              <Item key="headers">Headers</Item>
+              <Item key="body">Body</Item>
+            </TabList>
+            <TabPanels>
+              <Item key="queryParams">
+                <View
+                  paddingStart="size-200"
+                  paddingEnd="size-200"
+                  paddingBottom="size-200"
+                >
+                  <QueryParamsFields />
+                </View>
+              </Item>
+              <Item key="headers">
+                <View
+                  paddingStart="size-200"
+                  paddingEnd="size-200"
+                  paddingBottom="size-200"
+                >
+                  <HeadersFields />
+                </View>
+              </Item>
+              <Item key="body">
+                <View
+                  paddingStart="size-200"
+                  paddingEnd="size-200"
+                  paddingBottom="size-200"
+                >
+                  <BodyFields />
+                </View>
+              </Item>
+            </TabPanels>
           </Tabs>
 
           <AdvancedFields />

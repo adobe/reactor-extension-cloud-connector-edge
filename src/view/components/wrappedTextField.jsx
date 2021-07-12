@@ -21,30 +21,27 @@ import ValidationWrapper from './validationWrapper';
 const addDataElementToken = (value, dataElementToken) =>
   `${value || ''}${dataElementToken}`;
 
-const openDataElementSelector = (
-  tokenize,
-  name,
-  { getValues, setValue },
-  onChange
-) => () => {
-  // Whenever we're dealing with a data element token, we add it to whatever the existing value
-  // is. If we're not dealing with a token, we replace the value entirely. This is just due
-  // to how we want the UX to flow.
-  window.extensionBridge
-    .openDataElementSelector({
-      tokenize
-    })
-    .then((dataElement) => {
-      const newValue = tokenize
-        ? addDataElementToken(getValues(name), dataElement)
-        : dataElement;
+const openDataElementSelector =
+  (tokenize, name, { getValues, setValue }, onChange) =>
+  () => {
+    // Whenever we're dealing with a data element token, we add it to whatever the existing value
+    // is. If we're not dealing with a token, we replace the value entirely. This is just due
+    // to how we want the UX to flow.
+    window.extensionBridge
+      .openDataElementSelector({
+        tokenize
+      })
+      .then((dataElement) => {
+        const newValue = tokenize
+          ? addDataElementToken(getValues(name), dataElement)
+          : dataElement;
 
-      setValue(name, newValue, { shouldValidate: true, shouldDirty: true });
-      if (onChange) {
-        onChange(newValue);
-      }
-    });
-};
+        setValue(name, newValue, { shouldValidate: true, shouldDirty: true });
+        if (onChange) {
+          onChange(newValue);
+        }
+      });
+  };
 
 export default ({
   component: Component = TextField,
@@ -62,7 +59,7 @@ export default ({
     <Controller
       name={componentName}
       defaultValue={defaultValue}
-      render={({ onChange, onBlur, value, name, ref }) => (
+      render={({ field: { onChange, onBlur, value, name, ref } }) => (
         <ValidationWrapper width={width}>
           <Component
             width={width}

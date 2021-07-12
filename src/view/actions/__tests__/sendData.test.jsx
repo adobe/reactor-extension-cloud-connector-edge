@@ -33,30 +33,20 @@ afterEach(() => {
   delete window.extensionBridge;
 });
 
-const getTextFieldByLabel = (label) => {
-  const { getByLabelText } = screen;
-  return getByLabelText(label);
-};
+const getTextFieldByLabel = (label) => screen.getByLabelText(label);
 
-const getFromFields = () => {
-  const { queryByLabelText, queryByText, getByText, getByLabelText } = screen;
-
-  const addAnotherButton = queryByText(/add another/i);
-  return {
-    methodSelect: getByLabelText(/method/i, { selector: 'button' }),
-    urlInput: queryByLabelText(/url/i),
-    addAnotherButton: addAnotherButton
-      ? addAnotherButton.parentElement
-      : addAnotherButton,
-    queryParamsTab: getByText(/query params/i, { selector: 'span' }),
-    headersTab: getByText(/headers/i, { selector: 'span' }),
-    bodyTab: getByText(/^body$/i, { selector: 'span' }),
-    bodyRawInput: queryByLabelText('Body (Raw)'),
-    bodyRawCheckbox: queryByLabelText('Raw'),
-    saveResponseCheckbox: queryByLabelText('Save the request response'),
-    responseKeyInput: queryByLabelText(/response key/i)
-  };
-};
+const getFromFields = () => ({
+  methodSelect: screen.getByLabelText(/method/i, { selector: 'button' }),
+  urlInput: screen.queryByLabelText(/url/i),
+  addAnotherButton: screen.queryByRole('button', { name: /add another/i }),
+  queryParamsTab: screen.getByText(/query params/i, { selector: 'span' }),
+  headersTab: screen.getByText(/headers/i, { selector: 'span' }),
+  bodyTab: screen.getByText(/^body$/i, { selector: 'span' }),
+  bodyRawInput: screen.queryByLabelText('Body (Raw)'),
+  bodyRawCheckbox: screen.queryByLabelText('Raw'),
+  saveResponseCheckbox: screen.queryByLabelText('Save the request response'),
+  responseKeyInput: screen.queryByLabelText(/response key/i)
+});
 
 describe('Send data view', () => {
   beforeEach(() => {

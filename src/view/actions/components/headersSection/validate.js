@@ -15,7 +15,7 @@ export default ({ headers = [] }) => {
 
   headers.forEach((q, index) => {
     if (!q.key && q.value) {
-      errors[`headers[${index}].key`] = 'Please provide a key name';
+      errors[`headers.${index}.key`] = 'Please provide a key name';
     }
   });
 

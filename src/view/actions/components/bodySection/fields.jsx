@@ -35,7 +35,7 @@ import {
 
 export default () => {
   const { control, setValue, watch } = useFormContext();
-  const { bodyType, bodyRaw, bodyJsonPairs } = watch([
+  const [bodyType, bodyRaw, bodyJsonPairs] = watch([
     'bodyType',
     'bodyRaw',
     'bodyJsonPairs'
@@ -51,7 +51,7 @@ export default () => {
         control={control}
         name="bodyType"
         defaultValue=""
-        render={({ onChange, value }) => (
+        render={({ field: { onChange, value } }) => (
           <RadioGroup
             marginTop="size-250"
             label="Body Format"

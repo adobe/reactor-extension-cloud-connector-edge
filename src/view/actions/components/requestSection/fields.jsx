@@ -42,7 +42,7 @@ export default () => {
           control={control}
           name="method"
           defaultValue=""
-          render={({ onChange, onBlur, value }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <Picker
               label="Method"
               minWidth="size-2000"

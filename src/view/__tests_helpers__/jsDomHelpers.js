@@ -15,14 +15,12 @@ import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 export const changePickerValue = async (select, newValue) => {
-  const { getByText } = screen;
-
   await act(async () => {
     fireEvent.click(select);
   });
 
   await act(async () => {
-    const pickerOption = getByText(newValue, { selector: 'span' });
+    const pickerOption = screen.getByText(newValue, { selector: 'span' });
     fireEvent.click(pickerOption);
   });
 };

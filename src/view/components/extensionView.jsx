@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/require-default-props */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { View } from '@adobe/react-spectrum';
 import PropTypes from 'prop-types';
@@ -21,6 +21,8 @@ import ErrorBoundary from './errorBoundary';
 // import DisplayFormState from './displayFormState';
 
 const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const methods = useForm({
     mode: 'onTouched',
     shouldUnregister: false,
@@ -31,19 +33,13 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
     let initInfo;
 
     window.extensionBridge.register({
-      init: (_initInfo) => {
+      init: (_initInfo = {}) => {
+        setIsInitialized(false);
+
         initInfo = _initInfo;
+        methods.reset(getInitialValues({ initInfo }));
 
-        const initialValues = getInitialValues({ initInfo: _initInfo });
-
-        Object.keys(initialValues || {}).forEach((k) => {
-          methods.setValue(k, initialValues[k], {
-            shouldValidate: false,
-            shouldDirty: false
-          });
-        });
-
-        methods.clearErrors();
+        setIsInitialized(true);
       },
 
       getSettings: () =>
@@ -57,7 +53,7 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  return isInitialized ? (
     <View margin="size-200">
       <ErrorBoundary>
         <FormProvider
@@ -69,7 +65,7 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
         </FormProvider>
       </ErrorBoundary>
     </View>
-  );
+  ) : null;
 };
 
 ExtensionView.propTypes = {

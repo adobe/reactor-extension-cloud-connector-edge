@@ -21,7 +21,7 @@ export default (remove, variable, index, variables) => {
     <Flex direction="row" gap="size-200" key={`body${variable.id}`}>
       <View flex>
         <WrappedField
-          name={`bodyJsonPairs[${index}].key`}
+          name={`bodyJsonPairs.${index}.key`}
           defaultValue={variable.key}
           aria-label={`Body JSON Key ${index}`}
           width="100%"
@@ -30,7 +30,7 @@ export default (remove, variable, index, variables) => {
       </View>
       <View flex>
         <WrappedField
-          name={`bodyJsonPairs[${index}].value`}
+          name={`bodyJsonPairs.${index}.value`}
           defaultValue={variable.value}
           aria-label={`Body JSON Value ${index}`}
           width="100%"

@@ -15,7 +15,7 @@ export default ({ bodyJsonPairs = [] }) => {
 
   bodyJsonPairs.forEach((q, index) => {
     if (!q.key && q.value) {
-      errors[`bodyJsonPairs[${index}].key`] = 'Please provide a key name';
+      errors[`bodyJsonPairs.${index}.key`] = 'Please provide a key name';
     }
   });
 

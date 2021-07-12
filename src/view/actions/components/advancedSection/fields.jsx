@@ -41,7 +41,7 @@ export default () => {
         control={control}
         name="saveResponse"
         defaultValue=""
-        render={({ onChange, onBlur, value, ref }) => (
+        render={({ field: { onChange, onBlur, value, ref } }) => (
           <Checkbox
             onBlur={onBlur}
             onChange={(e) => {
