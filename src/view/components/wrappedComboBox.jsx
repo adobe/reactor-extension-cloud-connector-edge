@@ -14,9 +14,8 @@ governing permissions and limitations under the License.
 
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { ActionButton } from '@adobe/react-spectrum';
+import { ActionButton, ComboBox, Item } from '@adobe/react-spectrum';
 import Data from '@spectrum-icons/workflow/Data';
-import { ComboBox, Item } from '@react-spectrum/combobox';
 import ValidationWrapper from './validationWrapper';
 
 const addDataElementToken = (value, dataElementToken) =>

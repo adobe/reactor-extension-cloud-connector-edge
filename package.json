@@ -34,15 +34,14 @@
     ]
   },
   "dependencies": {
-    "@adobe/react-spectrum": "^3.11.2",
-    "@react-spectrum/combobox": "^3.0.0-rc.0",
+    "@adobe/react-spectrum": "^3.12.0",
     "@spectrum-icons/illustrations": "^3.2.1",
     "@spectrum-icons/workflow": "^3.2.0",
     "classnames": "^2.3.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.10.1"
+    "react-hook-form": "^7.11.0"
   },
   "devDependencies": {
     "@adobe/reactor-sandbox": "^11.2.1",
@@ -60,7 +59,7 @@
     "camelcase": "^6.2.0",
     "capitalize": "^2.0.3",
     "concurrently": "^6.2.0",
-    "css-loader": "^5.2.6",
+    "css-loader": "^5.2.7",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -79,7 +78,7 @@
     "jest": "^27.0.6",
     "jest-environment-jsdom": "^27.0.6",
     "jest-runner-eslint": "^0.10.1",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^11.0.1",
     "prettier": "^2.3.2",
     "pretty-quick": "^3.1.1",
     "style-loader": "^3.1.0",
