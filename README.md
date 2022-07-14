@@ -1,10 +1,10 @@
-# Cloud Connector extension for Adobe Experience Platform Launch Server Side
+# Cloud Connector extension for Adobe Experience Platform event forwarding
 
 [![Build Status](https://img.shields.io/github/workflow/status/adobe/reactor-extension-cloud-connector-edge/ci?style=flat)](https://github.com/adobe/reactor-extension-cloud-connector-edge/actions)
 [![Coverage Status](https://coveralls.io/repos/github/adobe/reactor-extension-cloud-connector-edge/badge.svg?branch=main)](https://coveralls.io/github/adobe/reactor-extension-cloud-connector-edge?branch=main)
 [![npm (scoped with tag)](https://img.shields.io/npm/v/@adobe/reactor-extension-cloud-connector-edge.svg?style=flat)](https://www.npmjs.com/package/@adobe/reactor-extension-cloud-connector-edge)
 
-Cloud Connector extension for Launch Server Side. It allows you to make `fetch` calls to third-party endpoints.
+Cloud Connector extension for Adobe Experience Platform event forwarding. It allows you to make `fetch` calls to third-party endpoints.
 
 ## Get started
 
