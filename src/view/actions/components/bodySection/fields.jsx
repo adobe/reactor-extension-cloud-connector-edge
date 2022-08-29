@@ -33,7 +33,7 @@ import {
   addToEntityFromVariables
 } from '../../../utils/entityVariablesConverter';
 
-export default () => {
+export default function BodySectionFields() {
   const { control, setValue, watch } = useFormContext();
   const [bodyType, bodyRaw, bodyJsonPairs] = watch([
     'bodyType',
@@ -157,4 +157,4 @@ export default () => {
       )}
     </>
   );
-};
+}

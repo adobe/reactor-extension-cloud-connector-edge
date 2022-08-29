@@ -40,7 +40,7 @@ import getAdvancedValues from './components/advancedSection/getInitValues';
 import getAdvancedSettings from './components/advancedSection/getSettings';
 import validateAdvancedFields from './components/advancedSection/validate';
 
-export default () => {
+export default function SendData() {
   const [selectedTab, setSelectedTab] = useState('queryParams');
 
   return (
@@ -70,7 +70,11 @@ export default () => {
         <>
           <RequestsFields />
 
-          <Tabs selectedKey={selectedTab} onSelectionChange={setSelectedTab}>
+          <Tabs
+            selectedKey={selectedTab}
+            onSelectionChange={setSelectedTab}
+            aria-label="Properties"
+          >
             <TabList>
               <Item key="queryParams">Query Params</Item>
               <Item key="headers">Headers</Item>
@@ -112,4 +116,4 @@ export default () => {
       )}
     />
   );
-};
+}

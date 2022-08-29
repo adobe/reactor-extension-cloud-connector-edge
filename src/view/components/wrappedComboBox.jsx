@@ -40,7 +40,7 @@ const openDataElementSelector =
       });
   };
 
-export default ({
+export default function AdvancedSection({
   name: componentName,
   onSelectionChange: componentOnSelectionChange,
   onBlur: componentOnBlur,
@@ -48,7 +48,7 @@ export default ({
   defaultValue = '',
   width = 'auto',
   ...rest
-}) => {
+}) {
   const methods = useFormContext();
 
   return (
@@ -94,4 +94,4 @@ export default ({
       {...rest}
     />
   );
-};
+}

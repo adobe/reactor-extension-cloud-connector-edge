@@ -16,13 +16,14 @@ import { ActionButton, Flex, View } from '@adobe/react-spectrum';
 import Delete from '@spectrum-icons/workflow/Delete';
 import WrappedField from '../../../components/wrappedTextField';
 
-export default (remove, variable, index, variables) => {
+export default function BodySectionRow(remove, variable, index, variables) {
+  const { id, value, key } = variable;
   return (
-    <Flex direction="row" gap="size-200" key={`body${variable.id}`}>
+    <Flex direction="row" gap="size-200" key={`body${id}`}>
       <View flex>
         <WrappedField
           name={`bodyJsonPairs.${index}.key`}
-          defaultValue={variable.key}
+          defaultValue={key}
           aria-label={`Body JSON Key ${index}`}
           width="100%"
           supportDataElement
@@ -31,7 +32,7 @@ export default (remove, variable, index, variables) => {
       <View flex>
         <WrappedField
           name={`bodyJsonPairs.${index}.value`}
-          defaultValue={variable.value}
+          defaultValue={value}
           aria-label={`Body JSON Value ${index}`}
           width="100%"
           supportDataElement
@@ -52,4 +53,4 @@ export default (remove, variable, index, variables) => {
       </View>
     </Flex>
   );
-};
+}

@@ -16,67 +16,77 @@ import { ActionButton, Flex, View } from '@adobe/react-spectrum';
 import WrappedTextField from '../../../components/wrappedTextField';
 import addQueryParamsToUrl from '../../../utils/addQueryParamsToUrl';
 
-export default (remove, setValue, url, variable, index, variables) => (
-  <Flex direction="row" gap="size-200" key={`queryParams${variable.id}`}>
-    <View flex>
-      <WrappedTextField
-        defaultValue={variable.key}
-        aria-label={`Query Param Key ${index}`}
-        width="100%"
-        name={`queryParams.${index}.key`}
-        supportDataElement
-        onChange={(v) => {
-          const newQueryParams = variables.slice();
-          newQueryParams[index].key = v;
-
-          setValue('url', addQueryParamsToUrl(url, newQueryParams), {
-            shouldValidate: true,
-            shouldDirty: true
-          });
-        }}
-      />
-    </View>
-
-    <View flex>
-      <WrappedTextField
-        aria-label={`Query Param Value ${index}`}
-        defaultValue={variable.value}
-        width="100%"
-        name={`queryParams.${index}.value`}
-        supportDataElement
-        onChange={(v) => {
-          const newQueryParams = variables.slice();
-          newQueryParams[index].value = v;
-
-          setValue('url', addQueryParamsToUrl(url, newQueryParams), {
-            shouldValidate: true,
-            shouldDirty: true
-          });
-        }}
-      />
-    </View>
-
-    <View width="size-450">
-      {variables.length > 1 && (
-        <ActionButton
-          aria-label={`Delete Query Param ${index}`}
-          isQuiet
-          onPress={() => {
-            remove(index);
-
-            let newQueryParams = variables.slice();
-            delete newQueryParams[index];
-            newQueryParams = newQueryParams.filter((q) => q);
+export default function QueryParamsSectionRow(
+  remove,
+  setValue,
+  url,
+  variable,
+  index,
+  variables
+) {
+  const { id, value, key } = variable;
+  return (
+    <Flex direction="row" gap="size-200" key={`queryParams${id}`}>
+      <View flex>
+        <WrappedTextField
+          defaultValue={key}
+          aria-label={`Query Param Key ${index}`}
+          width="100%"
+          name={`queryParams.${index}.key`}
+          supportDataElement
+          onChange={(v) => {
+            const newQueryParams = variables.slice();
+            newQueryParams[index].key = v;
 
             setValue('url', addQueryParamsToUrl(url, newQueryParams), {
               shouldValidate: true,
               shouldDirty: true
             });
           }}
-        >
-          <Delete />
-        </ActionButton>
-      )}
-    </View>
-  </Flex>
-);
+        />
+      </View>
+
+      <View flex>
+        <WrappedTextField
+          aria-label={`Query Param Value ${index}`}
+          defaultValue={value}
+          width="100%"
+          name={`queryParams.${index}.value`}
+          supportDataElement
+          onChange={(v) => {
+            const newQueryParams = variables.slice();
+            newQueryParams[index].value = v;
+
+            setValue('url', addQueryParamsToUrl(url, newQueryParams), {
+              shouldValidate: true,
+              shouldDirty: true
+            });
+          }}
+        />
+      </View>
+
+      <View width="size-450">
+        {variables.length > 1 && (
+          <ActionButton
+            aria-label={`Delete Query Param ${index}`}
+            isQuiet
+            onPress={() => {
+              remove(index);
+
+              let newQueryParams = variables.slice();
+              delete newQueryParams[index];
+              newQueryParams = newQueryParams.filter((q) => q);
+
+              setValue('url', addQueryParamsToUrl(url, newQueryParams), {
+                shouldValidate: true,
+                shouldDirty: true
+              });
+            }}
+          >
+            <Delete />
+          </ActionButton>
+        )}
+      </View>
+    </Flex>
+  );
+}

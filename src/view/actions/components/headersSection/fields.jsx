@@ -24,7 +24,7 @@ import { useFieldArray } from 'react-hook-form';
 import row from './row';
 import getEmptyHeader from './getEmptyValue';
 
-export default () => {
+export default function HeadersSectionFields() {
   const { fields, append, remove } = useFieldArray({
     name: 'headers'
   });
@@ -70,4 +70,4 @@ export default () => {
       </Button>
     </>
   );
-};
+}

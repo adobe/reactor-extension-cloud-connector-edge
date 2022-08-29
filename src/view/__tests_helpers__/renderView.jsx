@@ -10,13 +10,12 @@ governing permissions and limitations under the License.
 */
 
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { render } from '@testing-library/react';
 import { Provider, lightTheme } from '@adobe/react-spectrum';
 
 export default (View) => {
   render(
-    <Provider colorScheme="light" theme={lightTheme}>
+    <Provider colorScheme="light" theme={lightTheme} id="root">
       <View />
     </Provider>
   );

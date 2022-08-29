@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 /* eslint-disable no-cond-assign */
 
-const tokenPattern = new RegExp('{{([^}]+)}}');
+const tokenPattern = /{{([^}]+)}}/;
 
 const containsDataElementToken = (value) => tokenPattern.test(value);
 

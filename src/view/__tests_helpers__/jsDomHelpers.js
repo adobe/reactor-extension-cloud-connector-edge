@@ -11,21 +11,32 @@ governing permissions and limitations under the License.
 */
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { fireEvent, screen } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-export const changePickerValue = async (select, newValue) => {
-  await act(async () => {
-    fireEvent.click(select);
-  });
+export const changePickerValue = async (pickerTrigger, value) => {
+  fireEvent.click(pickerTrigger);
 
-  await act(async () => {
-    const pickerOption = screen.getByText(newValue, { selector: 'span' });
-    fireEvent.click(pickerOption);
+  const option = await screen.findByRole('option', { name: value });
+  fireEvent.click(option);
+
+  await waitFor(() => {
+    if (
+      // eslint-disable-next-line testing-library/no-node-access
+      document.getElementById('root').getAttribute('aria-hidden') === 'true'
+    ) {
+      throw new Error('Picker value not changed yet');
+    }
   });
 };
 
-export const inputOnChange = (input, value) =>
-  fireEvent.change(input, {
-    target: { value }
-  });
+export const changeInputValue = async (input, value) => {
+  await userEvent.clear(input);
+  if (value) {
+    await userEvent.type(input, value);
+  }
+};
+
+export const click = async (newTab) => {
+  await userEvent.click(newTab);
+};

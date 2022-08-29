@@ -30,7 +30,7 @@ const parseQueryParams = (setValue, v) => {
   });
 };
 
-export default () => {
+export default function RequestSectionFields() {
   const { setValue, control } = useFormContext();
 
   return (
@@ -87,11 +87,11 @@ export default () => {
             label="URL"
             isRequired
             necessityIndicator="label"
-            placeholder="Enter URL (eg. http://example.com/path?q=true)"
+            description="Enter URL (eg. http://example.com/path?q=true)"
             onChange={(v) => parseQueryParams(setValue, v)}
           />
         </View>
       </Flex>
     </>
   );
-};
+}

@@ -10,8 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-'use strict';
-
 const byteArrayToString = (buf) => {
   return String.fromCharCode.apply(null, new Uint8Array(buf));
 };

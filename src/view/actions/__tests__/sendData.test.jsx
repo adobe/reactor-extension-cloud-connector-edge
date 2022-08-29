@@ -11,12 +11,12 @@ governing permissions and limitations under the License.
 
 /* eslint-disable no-template-curly-in-string */
 
-import { fireEvent, screen } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { screen, act } from '@testing-library/react';
 import renderView from '../../__tests_helpers__/renderView';
 import {
   changePickerValue,
-  inputOnChange
+  changeInputValue,
+  click
 } from '../../__tests_helpers__/jsDomHelpers';
 
 import SendData from '../sendData';
@@ -39,9 +39,15 @@ const getFromFields = () => ({
   methodSelect: screen.getByLabelText(/method/i, { selector: 'button' }),
   urlInput: screen.queryByLabelText(/url/i),
   addAnotherButton: screen.queryByRole('button', { name: /add another/i }),
-  queryParamsTab: screen.getByText(/query params/i, { selector: 'span' }),
-  headersTab: screen.getByText(/headers/i, { selector: 'span' }),
-  bodyTab: screen.getByText(/^body$/i, { selector: 'span' }),
+  queryParamsTab: screen.getByText(/query params/i, {
+    selector: 'div[role="tablist"] span'
+  }),
+  headersTab: screen.getByText(/headers/i, {
+    selector: 'div[role="tablist"] span'
+  }),
+  bodyTab: screen.getByText(/^body$/i, {
+    selector: 'div[role="tablist"] span'
+  }),
   bodyRawInput: screen.queryByLabelText('Body (Raw)'),
   bodyRawCheckbox: screen.queryByLabelText('Raw'),
   saveResponseCheckbox: screen.queryByLabelText('Save the request response'),
@@ -49,11 +55,9 @@ const getFromFields = () => ({
 });
 
 describe('Send data view', () => {
-  beforeEach(() => {
-    renderView(SendData);
-  });
-
   test('sets form values from settings', async () => {
+    renderView(SendData);
+
     await act(async () => {
       extensionBridge.init({
         settings: {
@@ -94,9 +98,7 @@ describe('Send data view', () => {
     expect(responseKeyInput.value).toBe('keyName');
     expect(saveResponseCheckbox).toBeChecked();
 
-    await act(async () => {
-      fireEvent.click(headersTab);
-    });
+    await click(headersTab);
 
     const headerKeyInput = getTextFieldByLabel('Header Key 0');
     const headerValueInput = getTextFieldByLabel('Header Value 0');
@@ -104,9 +106,7 @@ describe('Send data view', () => {
     expect(headerKeyInput.value).toBe('c');
     expect(headerValueInput.value).toBe('d');
 
-    await act(async () => {
-      fireEvent.click(bodyTab);
-    });
+    await click(bodyTab);
 
     const bodyKeyInput = getTextFieldByLabel('Body JSON Key 0');
     const bodyValueInput = getTextFieldByLabel('Body JSON Value 0');
@@ -116,6 +116,8 @@ describe('Send data view', () => {
   });
 
   test('sets body raw form value from settings', async () => {
+    renderView(SendData);
+
     await act(async () => {
       extensionBridge.init({
         settings: {
@@ -125,17 +127,15 @@ describe('Send data view', () => {
     });
 
     const { bodyTab } = getFromFields();
-
-    await act(async () => {
-      fireEvent.click(bodyTab);
-    });
+    await click(bodyTab);
 
     const { bodyRawInput } = getFromFields();
-
     expect(bodyRawInput.value).toBe('{"e":"f"}');
   });
 
   test('sets settings from form values', async () => {
+    renderView(SendData);
+
     await act(async () => {
       extensionBridge.init({
         settings: {
@@ -162,51 +162,35 @@ describe('Send data view', () => {
       saveResponseCheckbox
     } = getFromFields();
 
-    await act(async () => {
-      inputOnChange(urlInput, 'http://www.anothergoogle.com?a=b');
-      changePickerValue(methodSelect, 'PUT');
-    });
+    await changeInputValue(urlInput, 'http://www.anothergoogle.com?a=b');
+    await changePickerValue(methodSelect, 'PUT');
 
     const queryKeyInput = getTextFieldByLabel('Query Param Key 0');
     const queryValueInput = getTextFieldByLabel('Query Param Value 0');
 
-    await act(async () => {
-      inputOnChange(queryKeyInput, 'aa');
-      inputOnChange(queryValueInput, 'bb');
-    });
+    await changeInputValue(queryKeyInput, 'aa');
+    await changeInputValue(queryValueInput, 'bb');
 
-    await act(async () => {
-      fireEvent.click(headersTab);
-    });
+    await click(headersTab);
 
     const headerKeyInput = getTextFieldByLabel('Header Key 0');
     const headerValueInput = getTextFieldByLabel('Header Value 0');
 
-    await act(async () => {
-      inputOnChange(headerKeyInput, 'cc');
-      inputOnChange(headerValueInput, 'dd');
-    });
+    await changeInputValue(headerKeyInput, 'cc');
+    await changeInputValue(headerValueInput, 'dd');
 
-    await act(async () => {
-      fireEvent.click(bodyTab);
-    });
+    await click(bodyTab);
 
     const bodyKeyInput = getTextFieldByLabel('Body JSON Key 0');
     const bodyValueInput = getTextFieldByLabel('Body JSON Value 0');
 
-    await act(async () => {
-      inputOnChange(bodyKeyInput, 'ee');
-      inputOnChange(bodyValueInput, 'ff');
-    });
+    await changeInputValue(bodyKeyInput, 'ee');
+    await changeInputValue(bodyValueInput, 'ff');
 
-    await act(async () => {
-      fireEvent.click(saveResponseCheckbox);
-    });
+    await click(saveResponseCheckbox);
 
     const { responseKeyInput } = getFromFields();
-    await act(async () => {
-      inputOnChange(responseKeyInput, 'keyName');
-    });
+    await changeInputValue(responseKeyInput, 'keyName');
 
     expect(extensionBridge.getSettings()).toStrictEqual({
       method: 'PUT',
@@ -225,6 +209,8 @@ describe('Send data view', () => {
   });
 
   test('sets settings from body raw value', async () => {
+    renderView(SendData);
+
     await act(async () => {
       extensionBridge.init({
         settings: {
@@ -234,16 +220,10 @@ describe('Send data view', () => {
     });
 
     const { bodyTab } = getFromFields();
-
-    await act(async () => {
-      fireEvent.click(bodyTab);
-    });
+    await click(bodyTab);
 
     const { bodyRawInput } = getFromFields();
-
-    await act(async () => {
-      inputOnChange(bodyRawInput, '{"ee":"ff"}');
-    });
+    await changeInputValue(bodyRawInput, '{{"ee":"ff"}');
 
     expect(extensionBridge.getSettings()).toEqual({
       method: 'GET',
@@ -253,6 +233,8 @@ describe('Send data view', () => {
   });
 
   test('handles form validation correctly', async () => {
+    renderView(SendData);
+
     await act(async () => {
       extensionBridge.init({
         settings: {
@@ -277,7 +259,7 @@ describe('Send data view', () => {
     expect(urlInput).not.toHaveAttribute('aria-invalid', 'true');
 
     // Check URL empty case
-    inputOnChange(urlInput, '');
+    await changeInputValue(urlInput, '');
 
     await act(async () => {
       extensionBridge.validate();
@@ -286,7 +268,7 @@ describe('Send data view', () => {
     expect(urlInput).toHaveAttribute('aria-invalid', 'true');
 
     // Check URL invalid case
-    inputOnChange(urlInput, 'gigi');
+    await changeInputValue(urlInput, 'gigi');
 
     await act(async () => {
       extensionBridge.validate();
@@ -295,17 +277,13 @@ describe('Send data view', () => {
     expect(urlInput).toHaveAttribute('aria-invalid', 'true');
 
     // Check HEADERS Section
-    await act(async () => {
-      fireEvent.click(headersTab);
-    });
+    await click(headersTab);
 
-    await act(async () => {
-      const { addAnotherButton } = getFromFields();
-      fireEvent.click(addAnotherButton);
-    });
+    const { addAnotherButton } = getFromFields();
+    await click(addAnotherButton);
 
-    const headersKeyInput0 = getTextFieldByLabel('Header Key 0');
-    const headersValueInput0 = getTextFieldByLabel('Header Value 0');
+    let headersKeyInput0 = getTextFieldByLabel('Header Key 0');
+    let headersValueInput0 = getTextFieldByLabel('Header Value 0');
 
     const headersKeyInput1 = getTextFieldByLabel('Header Key 1');
     const headersValueInput1 = getTextFieldByLabel('Header Value 1');
@@ -317,27 +295,26 @@ describe('Send data view', () => {
     expect(headersValueInput1).not.toHaveAttribute('aria-invalid');
 
     // Validate case when header key is empty and value is not.
-    inputOnChange(headersKeyInput0, '');
+    await changeInputValue(headersKeyInput0, '');
 
     await act(async () => {
       extensionBridge.validate();
     });
 
+    headersKeyInput0 = getTextFieldByLabel('Header Key 0');
+    headersValueInput0 = getTextFieldByLabel('Header Value 0');
+
     expect(headersKeyInput0).toHaveAttribute('aria-invalid', 'true');
     expect(headersValueInput0).not.toHaveAttribute('aria-invalid');
 
     // Check BODY Section
-    await act(async () => {
-      fireEvent.click(bodyTab);
-    });
+    await click(bodyTab);
 
-    await act(async () => {
-      const { addAnotherButton } = getFromFields();
-      fireEvent.click(addAnotherButton);
-    });
+    const { addAnotherButton: addAnotherButton2 } = getFromFields();
+    await click(addAnotherButton2);
 
-    const bodyJsonPairsKeyInput0 = getTextFieldByLabel('Body JSON Key 0');
-    const bodyJsonPairsValueInput0 = getTextFieldByLabel('Body JSON Value 0');
+    let bodyJsonPairsKeyInput0 = getTextFieldByLabel('Body JSON Key 0');
+    let bodyJsonPairsValueInput0 = getTextFieldByLabel('Body JSON Value 0');
 
     const bodyJsonPairsKeyInput1 = getTextFieldByLabel('Body JSON Key 1');
     const bodyJsonPairsValueInput1 = getTextFieldByLabel('Body JSON Value 1');
@@ -349,18 +326,22 @@ describe('Send data view', () => {
     expect(bodyJsonPairsValueInput1).not.toHaveAttribute('aria-invalid');
 
     // Validate case when header key is empty and value is not.
-    inputOnChange(bodyJsonPairsKeyInput0, '');
+    await changeInputValue(bodyJsonPairsKeyInput0, '');
 
     await act(async () => {
       extensionBridge.validate();
     });
 
+    bodyJsonPairsKeyInput0 = getTextFieldByLabel('Body JSON Key 0');
+    bodyJsonPairsValueInput0 = getTextFieldByLabel('Body JSON Value 0');
     expect(bodyJsonPairsKeyInput0).toHaveAttribute('aria-invalid', 'true');
     expect(bodyJsonPairsValueInput0).not.toHaveAttribute('aria-invalid');
   });
 
   describe('query params editor', () => {
     test('allows you to add a new row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -369,18 +350,14 @@ describe('Send data view', () => {
         });
       });
 
-      await act(async () => {
-        const { addAnotherButton } = getFromFields();
-        fireEvent.click(addAnotherButton);
-      });
+      const { addAnotherButton } = getFromFields();
+      await click(addAnotherButton);
 
-      await act(async () => {
-        const keyInput = getTextFieldByLabel('Query Param Key 1');
-        const valueInput = getTextFieldByLabel('Query Param Value 1');
+      const keyInput = getTextFieldByLabel('Query Param Key 1');
+      const valueInput = getTextFieldByLabel('Query Param Value 1');
 
-        inputOnChange(keyInput, 'c');
-        inputOnChange(valueInput, 'd');
-      });
+      await changeInputValue(keyInput, 'c');
+      await changeInputValue(valueInput, 'd');
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -389,6 +366,8 @@ describe('Send data view', () => {
     });
 
     test('allows you to delete a row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -398,9 +377,7 @@ describe('Send data view', () => {
       });
 
       const deleteButton = getTextFieldByLabel('Delete Query Param 1');
-      await act(async () => {
-        fireEvent.click(deleteButton);
-      });
+      await click(deleteButton);
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -411,6 +388,8 @@ describe('Send data view', () => {
 
   describe('headers editor', () => {
     test('allows you to add a new row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -427,23 +406,16 @@ describe('Send data view', () => {
       });
 
       const { headersTab } = getFromFields();
+      await click(headersTab);
 
-      await act(async () => {
-        fireEvent.click(headersTab);
-      });
+      const { addAnotherButton } = getFromFields();
+      await click(addAnotherButton);
 
-      await act(async () => {
-        const { addAnotherButton } = getFromFields();
-        fireEvent.click(addAnotherButton);
-      });
+      const keyInput = getTextFieldByLabel('Header Key 1');
+      const valueInput = getTextFieldByLabel('Header Value 1');
 
-      await act(async () => {
-        const keyInput = getTextFieldByLabel('Header Key 1');
-        const valueInput = getTextFieldByLabel('Header Value 1');
-
-        inputOnChange(keyInput, 'c');
-        inputOnChange(valueInput, 'd');
-      });
+      await changeInputValue(keyInput, 'c');
+      await changeInputValue(valueInput, 'd');
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -462,6 +434,8 @@ describe('Send data view', () => {
     });
 
     test('allows you to delete a row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -482,15 +456,10 @@ describe('Send data view', () => {
       });
 
       const { headersTab } = getFromFields();
-
-      await act(async () => {
-        fireEvent.click(headersTab);
-      });
+      await click(headersTab);
 
       const deleteButton = getTextFieldByLabel('Delete Header 1');
-      await act(async () => {
-        fireEvent.click(deleteButton);
-      });
+      await click(deleteButton);
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -507,6 +476,8 @@ describe('Send data view', () => {
 
   describe('body editor', () => {
     test('allows you to add a new row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -520,23 +491,16 @@ describe('Send data view', () => {
       });
 
       const { bodyTab } = getFromFields();
+      await click(bodyTab);
 
-      await act(async () => {
-        fireEvent.click(bodyTab);
-      });
+      const { addAnotherButton } = getFromFields();
+      await click(addAnotherButton);
 
-      await act(async () => {
-        const { addAnotherButton } = getFromFields();
-        fireEvent.click(addAnotherButton);
-      });
+      const keyInput = getTextFieldByLabel('Body JSON Key 1');
+      const valueInput = getTextFieldByLabel('Body JSON Value 1');
 
-      await act(async () => {
-        const keyInput = getTextFieldByLabel('Body JSON Key 1');
-        const valueInput = getTextFieldByLabel('Body JSON Value 1');
-
-        inputOnChange(keyInput, 'c');
-        inputOnChange(valueInput, 'd');
-      });
+      await changeInputValue(keyInput, 'c');
+      await changeInputValue(valueInput, 'd');
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -549,6 +513,8 @@ describe('Send data view', () => {
     });
 
     test('allows you to delete a row', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -563,15 +529,10 @@ describe('Send data view', () => {
       });
 
       const { bodyTab } = getFromFields();
-
-      await act(async () => {
-        fireEvent.click(bodyTab);
-      });
+      await click(bodyTab);
 
       const deleteButton = getTextFieldByLabel('Delete Body JSON 1');
-      await act(async () => {
-        fireEvent.click(deleteButton);
-      });
+      await click(deleteButton);
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
@@ -583,6 +544,8 @@ describe('Send data view', () => {
     });
 
     test('allows you to switch between JSON editor and raw editor', async () => {
+      renderView(SendData);
+
       await act(async () => {
         extensionBridge.init({
           settings: {
@@ -597,16 +560,10 @@ describe('Send data view', () => {
       });
 
       const { bodyTab } = getFromFields();
-
-      await act(async () => {
-        fireEvent.click(bodyTab);
-      });
+      await click(bodyTab);
 
       const { bodyRawCheckbox } = getFromFields();
-
-      await act(async () => {
-        fireEvent.click(bodyRawCheckbox);
-      });
+      await click(bodyRawCheckbox);
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',

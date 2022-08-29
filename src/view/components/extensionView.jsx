@@ -20,7 +20,12 @@ import PropTypes from 'prop-types';
 import ErrorBoundary from './errorBoundary';
 // import DisplayFormState from './displayFormState';
 
-const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
+const ExtensionView = function ExtensionView({
+  getInitialValues,
+  getSettings,
+  validate,
+  render
+}) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const methods = useForm({

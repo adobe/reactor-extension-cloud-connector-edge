@@ -24,7 +24,7 @@ import Info from '@spectrum-icons/workflow/Info';
 import { Controller, useFormContext } from 'react-hook-form';
 import WrappedTextField from '../../../components/wrappedTextField';
 
-export default () => {
+export default function AdvancedSectionFields() {
   const { watch, control } = useFormContext();
   const { saveResponse, responseKey } = watch();
   const [showResponseField, setShowResponseField] = useState();
@@ -75,4 +75,4 @@ export default () => {
       )}
     </View>
   );
-};
+}

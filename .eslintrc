@@ -3,6 +3,15 @@
     "es6": true,
     "jest": true
   },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "babelOptions": {
+      "plugins": ["@babel/plugin-syntax-import-assertions"]
+    }
+  },
   "extends": ["plugin:prettier/recommended"],
   "plugins": ["react-hooks", "header"],
   "rules": {

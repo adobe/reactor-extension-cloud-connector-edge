@@ -15,7 +15,7 @@ governing permissions and limitations under the License.
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-export default () => {
+export default function DisplayFormState() {
   const { formState } = useFormContext();
   return (
     <div style={{ margin: '1rem 0' }}>
@@ -31,4 +31,4 @@ export default () => {
       </pre>
     </div>
   );
-};
+}

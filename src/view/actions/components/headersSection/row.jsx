@@ -16,79 +16,83 @@ import { ActionButton, Flex, View } from '@adobe/react-spectrum';
 import WrappedTextField from '../../../components/wrappedTextField';
 import WrappedComboBox from '../../../components/wrappedComboBox';
 
-export default (remove, variable, index, variables) => (
-  <Flex direction="row" gap="size-200" key={`headers${variable.id}`}>
-    <View flex>
-      <WrappedComboBox
-        name={`headers.${index}.key`}
-        aria-label={`Header Key ${index}`}
-        defaultValue={variable.key}
-        supportDataElement
-        width="100%"
-        allowsCustomValue
-        defaultItems={[
-          'A-IM',
-          'Accept',
-          'Accept-Charset',
-          'Accept-Encoding',
-          'Accept-Language',
-          'Accept-Datetime',
-          'Access-Control-Request-Method',
-          'Access-Control-Request-Headers',
-          'Authorization',
-          'Cache-Control',
-          'Connection',
-          'Content-Length',
-          'Content-Type',
-          'Cookie',
-          'Date',
-          'Expect',
-          'Forwarded',
-          'From',
-          'Host',
-          'If-Match',
-          'If-Modified-Since',
-          'If-None-Match',
-          'If-Range',
-          'If-Unmodified-Since',
-          'Max-Forwards',
-          'Origin',
-          'Pragma',
-          'Proxy-Authorization',
-          'Range',
-          'Referer',
-          'TE',
-          'User-Agent',
-          'Upgrade',
-          'Via',
-          'Warning',
-          'DNT',
-          'X-Requested-With',
-          'X-CSRF-Token'
-        ].map((q) => ({ id: q, name: q }))}
-      />
-    </View>
-    <View flex>
-      <WrappedTextField
-        name={`headers.${index}.value`}
-        aria-label={`Header Value ${index}`}
-        defaultValue={variable.value}
-        supportDataElement
-        width="100%"
-      />
-    </View>
-    <View width="size-450">
-      {variables.length > 1 && (
-        <ActionButton
-          aria-label={`Delete Header ${index}`}
-          isQuiet
-          onPress={() => {
-            remove(index);
-          }}
-        >
-          <Delete />
-        </ActionButton>
-      )}
-    </View>
-  </Flex>
-);
+export default function HeadersSectionRow(remove, variable, index, variables) {
+  const { id, value, key } = variable;
+
+  return (
+    <Flex direction="row" gap="size-200" key={`headers${id}`}>
+      <View flex>
+        <WrappedComboBox
+          name={`headers.${index}.key`}
+          aria-label={`Header Key ${index}`}
+          defaultValue={key}
+          supportDataElement
+          width="100%"
+          allowsCustomValue
+          defaultItems={[
+            'A-IM',
+            'Accept',
+            'Accept-Charset',
+            'Accept-Encoding',
+            'Accept-Language',
+            'Accept-Datetime',
+            'Access-Control-Request-Method',
+            'Access-Control-Request-Headers',
+            'Authorization',
+            'Cache-Control',
+            'Connection',
+            'Content-Length',
+            'Content-Type',
+            'Cookie',
+            'Date',
+            'Expect',
+            'Forwarded',
+            'From',
+            'Host',
+            'If-Match',
+            'If-Modified-Since',
+            'If-None-Match',
+            'If-Range',
+            'If-Unmodified-Since',
+            'Max-Forwards',
+            'Origin',
+            'Pragma',
+            'Proxy-Authorization',
+            'Range',
+            'Referer',
+            'TE',
+            'User-Agent',
+            'Upgrade',
+            'Via',
+            'Warning',
+            'DNT',
+            'X-Requested-With',
+            'X-CSRF-Token'
+          ].map((q) => ({ id: q, name: q }))}
+        />
+      </View>
+      <View flex>
+        <WrappedTextField
+          name={`headers.${index}.value`}
+          aria-label={`Header Value ${index}`}
+          defaultValue={value}
+          supportDataElement
+          width="100%"
+        />
+      </View>
+      <View width="size-450">
+        {variables.length > 1 && (
+          <ActionButton
+            aria-label={`Delete Header ${index}`}
+            isQuiet
+            onPress={() => {
+              remove(index);
+            }}
+          >
+            <Delete />
+          </ActionButton>
+        )}
+      </View>
+    </Flex>
+  );
+}
