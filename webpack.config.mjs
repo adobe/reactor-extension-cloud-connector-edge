@@ -25,7 +25,7 @@ const __dirname = dirname(__filename);
 const entries = {};
 const plugins = [];
 
-export default (env) => {
+export default (env, argv) => {
   // Each view becomes its own "app". These are automatically generated based on naming convention.
   ['action'].forEach((type) => {
     const typePluralized = type + 's';
@@ -56,6 +56,13 @@ export default (env) => {
         plugins.push(
           new HtmlWebpackPlugin({
             title: itemDescriptor.displayName || 'Configuration',
+            reactDevHook:
+              argv.mode === 'development'
+                ? '<script> if (window.parent !== window) {' +
+                  ' window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = ' +
+                  'window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__; ' +
+                  '} </script>'
+                : '',
             filename: `${chunkName}.html`,
             template: 'src/view/template.html',
             chunks: ['common', chunkName]

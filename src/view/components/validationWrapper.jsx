@@ -16,7 +16,7 @@ import showError from '../utils/showError';
 
 export default function ValidationWrapper({ children, width }) {
   const [firstChild, ...restChildren] = children;
-  const fieldName = firstChild.props.name;
+  const { name: fieldName, description } = firstChild.props;
   const {
     formState: { errors }
   } = useFormContext();
@@ -27,7 +27,8 @@ export default function ValidationWrapper({ children, width }) {
     <Flex direction="row" width={width}>
       {React.cloneElement(firstChild, {
         validationState: showErrorResult ? 'invalid' : '',
-        errorMessage: showErrorResult
+        errorMessage: showErrorResult || '',
+        description: description || ' ' // This line is a workaround for https://github.com/adobe/react-spectrum/issues/3473
       })}
 
       {restChildren}

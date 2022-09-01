@@ -14,82 +14,127 @@ governing permissions and limitations under the License.
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ActionButton, ComboBox, Item } from '@adobe/react-spectrum';
+import { useTreeData } from 'react-stately';
 import Data from '@spectrum-icons/workflow/Data';
 import ValidationWrapper from './validationWrapper';
 
 const addDataElementToken = (value, dataElementToken) =>
   `${value || ''}${dataElementToken}`;
 
-const openDataElementSelector =
-  (tokenize, name, { getValues, setValue }) =>
-  () => {
-    // Whenever we're dealing with a data element token, we add it to whatever the existing value
-    // is. If we're not dealing with a token, we replace the value entirely. This is just due
-    // to how we want the UX to flow.
-    window.extensionBridge
-      .openDataElementSelector({
-        tokenize
-      })
-      .then((dataElement) => {
-        const newValue = tokenize
-          ? addDataElementToken(getValues(name), dataElement)
-          : dataElement;
+const openDataElementSelector = (tokenize, fieldState, onInputChange) => () => {
+  // Whenever we're dealing with a data element token, we add it to whatever the existing value
+  // is. If we're not dealing with a token, we replace the value entirely. This is just due
+  // to how we want the UX to flow.
+  window.extensionBridge
+    .openDataElementSelector({
+      tokenize
+    })
+    .then((dataElement) => {
+      const newValue = tokenize
+        ? addDataElementToken(fieldState.inputValue, dataElement)
+        : dataElement;
 
-        setValue(name, newValue, { shouldValidate: true, shouldDirty: true });
-      });
-  };
+      onInputChange(newValue);
+    });
+};
 
-export default function AdvancedSection({
+export default function WrappedComboBoxField({
   name: componentName,
   onSelectionChange: componentOnSelectionChange,
+  onInputChange: componentOnInputChange,
   onBlur: componentOnBlur,
   supportDataElement,
   defaultValue = '',
+  defaultItems,
   width = 'auto',
   ...rest
 }) {
   const methods = useFormContext();
   const hasLabel = Boolean(rest.label);
+  const { watch } = methods;
+
+  const list = useTreeData({
+    initialItems: defaultItems
+  });
+
+  const initialValue = watch(componentName);
+
+  const [fieldState, setFieldState] = React.useState({
+    selectedKey: list.getItem(initialValue)?.value.id,
+    inputValue: initialValue
+  });
 
   return (
     <Controller
       name={componentName}
       defaultValue={defaultValue}
-      render={({ field: { onChange, onBlur, value, name, ref } }) => (
-        <ValidationWrapper width={width}>
-          <ComboBox
-            width={width}
-            name={name}
-            onBlur={(e) => {
-              onBlur(e);
-              if (componentOnBlur) {
-                componentOnBlur(e);
-              }
-            }}
-            onInputChange={onChange}
-            inputValue={value}
-            inputRef={ref}
-            {...rest}
-          >
-            {(item) => <Item>{item.name}</Item>}
-          </ComboBox>
+      render={({ field: { onChange, onBlur, name } }) => {
+        const onInputChange = (v) => {
+          setFieldState((prevState) => ({
+            inputValue: v,
+            selectedKey: v === '' ? null : prevState.selectedKey
+          }));
 
-          {supportDataElement && (
-            <ActionButton
-              aria-label="Open data element selector"
-              marginStart="size-65"
-              marginTop={hasLabel ? 'size-300' : ''}
-              onPress={openDataElementSelector(
-                supportDataElement,
-                name,
-                methods
-              )}
+          onChange(v);
+
+          if (componentOnInputChange) {
+            componentOnInputChange(v);
+          }
+        };
+
+        return (
+          <ValidationWrapper width={width}>
+            <ComboBox
+              {...rest}
+              width={width}
+              name={name}
+              onBlur={(e) => {
+                onBlur(e);
+                if (componentOnBlur) {
+                  componentOnBlur(e);
+                }
+              }}
+              defaultItems={list.items}
+              selectedKey={fieldState.selectedKey}
+              inputValue={fieldState.inputValue}
+              onSelectionChange={(key) => {
+                setFieldState((prevState) => {
+                  return {
+                    inputValue:
+                      list.getItem(key)?.value.name ??
+                      (rest.allowsCustomValue ? prevState.inputValue : ''),
+                    selectedKey: key
+                  };
+                });
+
+                onChange(fieldState.inputValue);
+
+                if (componentOnSelectionChange) {
+                  componentOnSelectionChange(key);
+                }
+              }}
+              onInputChange={onInputChange}
             >
-              <Data />
-            </ActionButton>
-          )}
-        </ValidationWrapper>
-      )}
+              {(item) => <Item>{item.value.name}</Item>}
+            </ComboBox>
+
+            {supportDataElement && (
+              <ActionButton
+                aria-label="Open data element selector"
+                marginStart="size-65"
+                marginTop={hasLabel ? 'size-300' : ''}
+                onPress={openDataElementSelector(
+                  supportDataElement,
+                  fieldState,
+                  onInputChange
+                )}
+              >
+                <Data />
+              </ActionButton>
+            )}
+          </ValidationWrapper>
+        );
+      }}
       {...rest}
     />
   );
