@@ -45,7 +45,7 @@ export default function WrappedComboBoxField({
   onBlur: componentOnBlur,
   supportDataElement,
   defaultValue = '',
-  defaultItems,
+  defaultItems = [],
   width = 'auto',
   ...rest
 }) {
@@ -60,7 +60,7 @@ export default function WrappedComboBoxField({
   const initialValue = watch(componentName);
 
   const [fieldState, setFieldState] = React.useState({
-    selectedKey: list.getItem(initialValue)?.value.id,
+    selectedKey: list.getItem(initialValue)?.value.id || '',
     inputValue: initialValue
   });
 
@@ -68,7 +68,7 @@ export default function WrappedComboBoxField({
     <Controller
       name={componentName}
       defaultValue={defaultValue}
-      render={({ field: { onChange, onBlur, name } }) => {
+      render={({ field: { onChange, onBlur, name, ref } }) => {
         const onInputChange = (v) => {
           setFieldState((prevState) => ({
             inputValue: v,
@@ -87,6 +87,7 @@ export default function WrappedComboBoxField({
             <ComboBox
               {...rest}
               width={width}
+              ref={ref}
               name={name}
               onBlur={(e) => {
                 onBlur(e);
