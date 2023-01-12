@@ -35,7 +35,7 @@ export default function AdvancedSectionFields() {
 
   return (
     <View marginTop="size-200">
-      <Heading size="3">Advanced</Heading>
+      <Heading level="3">Advanced</Heading>
 
       <Controller
         control={control}

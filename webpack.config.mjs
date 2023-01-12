@@ -92,6 +92,7 @@ export default (env, argv) => {
       }
     },
     entry: entries,
+    devtool: argv.mode === 'development' ? 'source-map' : false,
     plugins: plugins,
     output: {
       path: path.resolve(__dirname, 'dist'),

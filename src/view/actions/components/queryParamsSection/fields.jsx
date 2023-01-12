@@ -34,9 +34,7 @@ export default function QueryParamsSectionFields() {
 
   return (
     <>
-      <Heading level="3">Query Params</Heading>
-      <Divider size="M" />
-      <Flex direction="column" gap="size-100">
+      <Flex direction="column" gap="size-100" marginTop="size-100">
         <Flex direction="row" gap="size-200">
           <View flex>
             <Heading
@@ -45,7 +43,7 @@ export default function QueryParamsSectionFields() {
               marginTop="size-100"
               marginBottom="size-50"
             >
-              KEY
+              NAME
             </Heading>
           </View>
           <View flex>

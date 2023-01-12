@@ -76,7 +76,7 @@ export default function SendData() {
             aria-label="Properties"
           >
             <TabList>
-              <Item key="queryParams">Query Params</Item>
+              <Item key="queryParams">Query Parameters</Item>
               <Item key="headers">Headers</Item>
               <Item key="body">Body</Item>
             </TabList>

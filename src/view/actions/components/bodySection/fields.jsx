@@ -46,15 +46,15 @@ export default function BodySectionFields() {
   });
 
   return (
-    <>
+    <Flex direction="column" gap={bodyType === 'raw' ? 'size-150' : ''}>
       <Controller
         control={control}
         name="bodyType"
         defaultValue=""
         render={({ field: { onChange, value } }) => (
           <RadioGroup
+            aria-label="Body"
             marginTop="size-250"
-            label="Body Format"
             value={value}
             onChange={(v) => {
               onChange(v);
@@ -76,9 +76,11 @@ export default function BodySectionFields() {
                   shouldValidate: true,
                   shouldDirty: true
                 });
-              } else {
+              } else if (bodyJsonPairs.length > 1 || bodyJsonPairs[0].key) {
                 let entity = JSON.stringify(
-                  addToEntityFromVariables({}, bodyJsonPairs)
+                  addToEntityFromVariables({}, bodyJsonPairs),
+                  null,
+                  2
                 );
 
                 if (entity === '{}') {
@@ -93,9 +95,16 @@ export default function BodySectionFields() {
               // END: Auto Update Body Content
             }}
           >
-            <Flex>
-              <Radio value="object">JSON</Radio>
-              <Radio value="raw">Raw</Radio>
+            <Flex alignItems="center">
+              <Text marginEnd="size-150">
+                Select the way you want to provide the body
+              </Text>
+              <Radio value="raw" aria-label="Raw">
+                Raw
+              </Radio>
+              <Radio value="object" aria-label="JSON Key-Value Pairs Editor">
+                JSON Key-Value Pairs Editor
+              </Radio>
             </Flex>
           </RadioGroup>
         )}
@@ -103,8 +112,6 @@ export default function BodySectionFields() {
 
       {bodyType === 'object' ? (
         <>
-          <Heading level="3">Body (JSON)</Heading>
-          <Divider size="M" />
           <Flex direction="column" gap="size-100">
             <Flex direction="row" gap="size-200">
               <View flex>
@@ -132,29 +139,26 @@ export default function BodySectionFields() {
             <Divider size="S" />
             {fields.map(row.bind(null, remove))}
           </Flex>
-
-          <Button
-            marginTop="size-150"
-            variant="primary"
-            onPress={() => append(getEmptyBodyJson())}
-          >
-            <Add />
-            <Text>Add Another</Text>
-          </Button>
+          <View>
+            <Button
+              marginTop="size-150"
+              variant="primary"
+              onPress={() => append(getEmptyBodyJson())}
+            >
+              <Add />
+              <Text>Add Another</Text>
+            </Button>
+          </View>
         </>
       ) : (
-        <>
-          <Heading level="3">Body (Raw)</Heading>
-          <Divider size="M" marginBottom="size-150" />
-          <WrappedTextField
-            width="100%"
-            component={TextArea}
-            name="bodyRaw"
-            aria-label="Body (Raw)"
-            supportDataElement
-          />
-        </>
+        <WrappedTextField
+          width="100%"
+          component={TextArea}
+          name="bodyRaw"
+          aria-label="Body (Raw)"
+          supportDataElement
+        />
       )}
-    </>
+    </Flex>
   );
 }

@@ -87,7 +87,7 @@ export default function RequestSectionFields() {
             label="URL"
             isRequired
             necessityIndicator="label"
-            description="Enter URL (eg. http://example.com/path?q=true)"
+            description="Enter request URL (eg. http://example.com/path?q=true)."
             onChange={(v) => parseQueryParams(setValue, v)}
           />
         </View>

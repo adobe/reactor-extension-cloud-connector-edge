@@ -10,39 +10,16 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import getEmptyBodyJson from './getEmptyValue';
-import { addToVariablesFromEntity } from '../../../utils/entityVariablesConverter';
-
 export default ({ settings }) => {
-  let bodyType;
-  let bodyRaw = '';
-  let bodyJsonPairs = [];
-  const body = settings?.body;
+  let bodyRaw = settings?.body || '';
 
-  if (typeof body === 'object') {
-    bodyType = 'object';
-    bodyJsonPairs = addToVariablesFromEntity([], body);
-
-    bodyRaw = JSON.stringify(body);
-  } else {
-    bodyType = 'raw';
-    bodyRaw = body;
-
-    try {
-      const parsedBody = JSON.parse(body);
-      bodyJsonPairs = addToVariablesFromEntity([], parsedBody);
-    } catch (e) {
-      // Do not do a thing.
-    }
-  }
-
-  if (bodyJsonPairs.length === 0) {
-    bodyJsonPairs.push(getEmptyBodyJson());
+  if (typeof bodyRaw === 'object') {
+    bodyRaw = JSON.stringify(bodyRaw, null, 2);
   }
 
   return {
-    bodyType,
+    bodyType: 'raw',
     bodyRaw: bodyRaw || '',
-    bodyJsonPairs
+    bodyJsonPairs: []
   };
 };

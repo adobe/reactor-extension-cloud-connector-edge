@@ -26,7 +26,11 @@ export default ({ bodyType, bodyRaw, bodyJsonPairs }) => {
       body = null;
     }
   } else {
-    body = bodyRaw;
+    try {
+      body = JSON.parse(bodyRaw);
+    } catch {
+      body = bodyRaw;
+    }
   }
 
   if (body) {

@@ -31,7 +31,7 @@ module.exports = ({
     }, {});
   }
 
-  if (typeof body === 'object') {
+  if (typeof body !== 'string') {
     body = JSON.stringify(body);
   }
 
