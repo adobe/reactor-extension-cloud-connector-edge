@@ -10,14 +10,16 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-export default ({ bodyJsonPairs = [] }) => {
+export default ({ bodyJsonPairs = [], bodyType }) => {
   const errors = {};
 
-  bodyJsonPairs.forEach((q, index) => {
-    if (!q.key && q.value) {
-      errors[`bodyJsonPairs.${index}.key`] = 'Please provide a key name';
-    }
-  });
+  if (bodyType === 'object') {
+    bodyJsonPairs.forEach((q, index) => {
+      if (!q.key && q.value) {
+        errors[`bodyJsonPairs.${index}.key`] = 'Please provide a key name';
+      }
+    });
+  }
 
   return errors;
 };

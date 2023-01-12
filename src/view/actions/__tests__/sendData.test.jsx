@@ -39,7 +39,7 @@ const getFromFields = () => ({
   methodSelect: screen.getByLabelText(/method/i, { selector: 'button' }),
   urlInput: screen.queryByLabelText(/url/i),
   addAnotherButton: screen.queryByRole('button', { name: /add another/i }),
-  queryParamsTab: screen.getByText(/query params/i, {
+  queryParamsTab: screen.getByText(/query parameters/i, {
     selector: 'div[role="tablist"] span'
   }),
   headersTab: screen.getByText(/headers/i, {
@@ -50,6 +50,7 @@ const getFromFields = () => ({
   }),
   bodyRawInput: screen.queryByLabelText('Body (Raw)'),
   bodyRawCheckbox: screen.queryByLabelText('Raw'),
+  bodyJsonCheckbox: screen.queryByLabelText('JSON Key-Value Pairs Editor'),
   saveResponseCheckbox: screen.queryByLabelText('Save the request response'),
   responseKeyInput: screen.queryByLabelText(/response key/i)
 });
@@ -107,6 +108,9 @@ describe('Send data view', () => {
     expect(headerValueInput.value).toBe('d');
 
     await click(bodyTab);
+
+    const { bodyJsonCheckbox } = getFromFields();
+    await click(bodyJsonCheckbox);
 
     const bodyKeyInput = getTextFieldByLabel('Body JSON Key 0');
     const bodyValueInput = getTextFieldByLabel('Body JSON Value 0');
@@ -181,6 +185,9 @@ describe('Send data view', () => {
 
     await click(bodyTab);
 
+    const { bodyJsonCheckbox } = getFromFields();
+    await click(bodyJsonCheckbox);
+
     const bodyKeyInput = getTextFieldByLabel('Body JSON Key 0');
     const bodyValueInput = getTextFieldByLabel('Body JSON Value 0');
 
@@ -228,7 +235,7 @@ describe('Send data view', () => {
     expect(extensionBridge.getSettings()).toEqual({
       method: 'GET',
       url: '',
-      body: '{"ee":"ff"}'
+      body: { ee: 'ff' }
     });
   });
 
@@ -309,6 +316,9 @@ describe('Send data view', () => {
 
     // Check BODY Section
     await click(bodyTab);
+
+    const { bodyJsonCheckbox } = getFromFields();
+    await click(bodyJsonCheckbox);
 
     const { addAnotherButton: addAnotherButton2 } = getFromFields();
     await click(addAnotherButton2);
@@ -493,6 +503,9 @@ describe('Send data view', () => {
       const { bodyTab } = getFromFields();
       await click(bodyTab);
 
+      const { bodyJsonCheckbox } = getFromFields();
+      await click(bodyJsonCheckbox);
+
       const { addAnotherButton } = getFromFields();
       await click(addAnotherButton);
 
@@ -531,6 +544,9 @@ describe('Send data view', () => {
       const { bodyTab } = getFromFields();
       await click(bodyTab);
 
+      const { bodyJsonCheckbox } = getFromFields();
+      await click(bodyJsonCheckbox);
+
       const deleteButton = getTextFieldByLabel('Delete Body JSON 1');
       await click(deleteButton);
 
@@ -543,7 +559,7 @@ describe('Send data view', () => {
       });
     });
 
-    test('allows you to switch between JSON editor and raw editor', async () => {
+    test('returns the same JSON data when changing editor modes', async () => {
       renderView(SendData);
 
       await act(async () => {
@@ -562,13 +578,47 @@ describe('Send data view', () => {
       const { bodyTab } = getFromFields();
       await click(bodyTab);
 
+      const { bodyJsonCheckbox } = getFromFields();
+      await click(bodyJsonCheckbox);
+
+      expect(extensionBridge.getSettings()).toEqual({
+        method: 'GET',
+        url: '',
+        body: { a: 'b', c: 'd' }
+      });
+    });
+
+    test('does not lose the non JSON raw body when switching editor modes', async () => {
+      renderView(SendData);
+
+      await act(async () => {
+        extensionBridge.init({
+          settings: {
+            method: 'GET',
+            url: '',
+            body: '{a:"b",c:"d"}a'
+          }
+        });
+      });
+
+      const { bodyTab } = getFromFields();
+      await click(bodyTab);
+
+      const { bodyJsonCheckbox } = getFromFields();
+      await click(bodyJsonCheckbox);
+
+      expect(extensionBridge.getSettings()).toEqual({
+        method: 'GET',
+        url: ''
+      });
+
       const { bodyRawCheckbox } = getFromFields();
       await click(bodyRawCheckbox);
 
       expect(extensionBridge.getSettings()).toEqual({
         method: 'GET',
         url: '',
-        body: '{"a":"b","c":"d"}'
+        body: '{a:"b",c:"d"}a'
       });
     });
   });

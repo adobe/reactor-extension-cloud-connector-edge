@@ -53,6 +53,7 @@ export default function BodySectionFields() {
         defaultValue=""
         render={({ field: { onChange, value } }) => (
           <RadioGroup
+            aria-label="Body"
             marginTop="size-250"
             value={value}
             onChange={(v) => {
@@ -75,9 +76,11 @@ export default function BodySectionFields() {
                   shouldValidate: true,
                   shouldDirty: true
                 });
-              } else {
+              } else if (bodyJsonPairs.length > 1 || bodyJsonPairs[0].key) {
                 let entity = JSON.stringify(
-                  addToEntityFromVariables({}, bodyJsonPairs)
+                  addToEntityFromVariables({}, bodyJsonPairs),
+                  null,
+                  2
                 );
 
                 if (entity === '{}') {
@@ -96,8 +99,12 @@ export default function BodySectionFields() {
               <Text marginEnd="size-150">
                 Select the way you want to provide the body
               </Text>
-              <Radio value="raw">Raw</Radio>
-              <Radio value="object">JSON Key-Value Pairs Editor</Radio>
+              <Radio value="raw" aria-label="Raw">
+                Raw
+              </Radio>
+              <Radio value="object" aria-label="JSON Key-Value Pairs Editor">
+                JSON Key-Value Pairs Editor
+              </Radio>
             </Flex>
           </RadioGroup>
         )}
