@@ -10,9 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const byteArrayToString = (buf) => {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
-};
+const byteArrayToString = (buf) =>
+  new TextDecoder('utf-8').decode(new Uint8Array(buf));
 
 module.exports = ({
   arc: { ruleStash = {} },
