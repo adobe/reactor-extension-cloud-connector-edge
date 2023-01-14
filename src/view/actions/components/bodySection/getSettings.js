@@ -11,8 +11,9 @@ governing permissions and limitations under the License.
 */
 
 import { addToEntityFromVariables } from '../../../utils/entityVariablesConverter';
+import requestMethodHelper from '../requestSection/requestMethodHelper';
 
-export default ({ bodyType, bodyRaw, bodyJsonPairs }) => {
+export default ({ method, bodyType, bodyRaw, bodyJsonPairs }) => {
   let body;
   const settings = {};
 
@@ -33,7 +34,7 @@ export default ({ bodyType, bodyRaw, bodyJsonPairs }) => {
     }
   }
 
-  if (body) {
+  if (body && requestMethodHelper.showBodyTab(method)) {
     settings.body = body;
   }
 
