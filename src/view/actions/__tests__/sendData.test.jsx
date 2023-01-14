@@ -45,7 +45,7 @@ const getFromFields = () => ({
   headersTab: screen.getByText(/headers/i, {
     selector: 'div[role="tablist"] span'
   }),
-  bodyTab: screen.getByText(/^body$/i, {
+  bodyTab: screen.queryByText(/^body$/i, {
     selector: 'div[role="tablist"] span'
   }),
   bodyRawInput: screen.queryByLabelText('Body (Raw)'),
@@ -125,6 +125,7 @@ describe('Send data view', () => {
     await act(async () => {
       extensionBridge.init({
         settings: {
+          method: 'POST',
           body: '{"e":"f"}'
         }
       });
@@ -221,6 +222,7 @@ describe('Send data view', () => {
     await act(async () => {
       extensionBridge.init({
         settings: {
+          method: 'POST',
           body: '{"e":"f"}'
         }
       });
@@ -233,7 +235,7 @@ describe('Send data view', () => {
     await changeInputValue(bodyRawInput, '{{"ee":"ff"}');
 
     expect(extensionBridge.getSettings()).toEqual({
-      method: 'GET',
+      method: 'POST',
       url: '',
       body: { ee: 'ff' }
     });
@@ -491,7 +493,7 @@ describe('Send data view', () => {
       await act(async () => {
         extensionBridge.init({
           settings: {
-            method: 'GET',
+            method: 'POST',
             url: '',
             body: {
               a: 'b'
@@ -516,7 +518,7 @@ describe('Send data view', () => {
       await changeInputValue(valueInput, 'd');
 
       expect(extensionBridge.getSettings()).toEqual({
-        method: 'GET',
+        method: 'POST',
         url: '',
         body: {
           a: 'b',
@@ -531,7 +533,7 @@ describe('Send data view', () => {
       await act(async () => {
         extensionBridge.init({
           settings: {
-            method: 'GET',
+            method: 'POST',
             url: '',
             body: {
               a: 'b',
@@ -551,7 +553,7 @@ describe('Send data view', () => {
       await click(deleteButton);
 
       expect(extensionBridge.getSettings()).toEqual({
-        method: 'GET',
+        method: 'POST',
         url: '',
         body: {
           a: 'b'
@@ -565,7 +567,7 @@ describe('Send data view', () => {
       await act(async () => {
         extensionBridge.init({
           settings: {
-            method: 'GET',
+            method: 'POST',
             url: '',
             body: {
               a: 'b',
@@ -582,7 +584,7 @@ describe('Send data view', () => {
       await click(bodyJsonCheckbox);
 
       expect(extensionBridge.getSettings()).toEqual({
-        method: 'GET',
+        method: 'POST',
         url: '',
         body: { a: 'b', c: 'd' }
       });
@@ -594,7 +596,7 @@ describe('Send data view', () => {
       await act(async () => {
         extensionBridge.init({
           settings: {
-            method: 'GET',
+            method: 'POST',
             url: '',
             body: '{a:"b",c:"d"}a'
           }
@@ -608,7 +610,7 @@ describe('Send data view', () => {
       await click(bodyJsonCheckbox);
 
       expect(extensionBridge.getSettings()).toEqual({
-        method: 'GET',
+        method: 'POST',
         url: ''
       });
 
@@ -616,10 +618,32 @@ describe('Send data view', () => {
       await click(bodyRawCheckbox);
 
       expect(extensionBridge.getSettings()).toEqual({
-        method: 'GET',
+        method: 'POST',
         url: '',
         body: '{a:"b",c:"d"}a'
       });
+    });
+
+    test('is not visible for GET requests', async () => {
+      renderView(SendData);
+
+      await act(async () => {
+        extensionBridge.init({
+          settings: {
+            method: 'POST',
+            url: '',
+            body: '{a:"b",c:"d"}'
+          }
+        });
+      });
+
+      let { bodyTab, methodSelect } = getFromFields();
+      await click(bodyTab);
+
+      await changePickerValue(methodSelect, 'GET');
+
+      ({ bodyTab } = getFromFields());
+      expect(bodyTab).toBeNull();
     });
   });
 });

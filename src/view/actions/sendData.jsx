@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { Item, View, TabList, TabPanels, Tabs } from '@adobe/react-spectrum';
 
 import ExtensionView from '../components/extensionView';
+import requestMethodHelper from './components/requestSection/requestMethodHelper';
 
 import RequestsFields from './components/requestSection/fields';
 import getRequestFieldsInitValues from './components/requestSection/getInitValues';
@@ -40,8 +41,10 @@ import getAdvancedValues from './components/advancedSection/getInitValues';
 import getAdvancedSettings from './components/advancedSection/getSettings';
 import validateAdvancedFields from './components/advancedSection/validate';
 
+const DEFAULT_TAB = 'queryParams';
+
 export default function SendData() {
-  const [selectedTab, setSelectedTab] = useState('queryParams');
+  const [selectedTab, setSelectedTab] = useState(DEFAULT_TAB);
 
   return (
     <ExtensionView
@@ -66,9 +69,13 @@ export default function SendData() {
         ...validateBodyFields(values),
         ...validateAdvancedFields(values)
       })}
-      render={() => (
+      render={({ method }) => (
         <>
-          <RequestsFields />
+          <RequestsFields
+            onMethodUpdate={(v) =>
+              requestMethodHelper.showBodyTab(v) || setSelectedTab(DEFAULT_TAB)
+            }
+          />
 
           <Tabs
             selectedKey={selectedTab}
@@ -78,7 +85,9 @@ export default function SendData() {
             <TabList>
               <Item key="queryParams">Query Parameters</Item>
               <Item key="headers">Headers</Item>
-              <Item key="body">Body</Item>
+              {requestMethodHelper.showBodyTab(method) && (
+                <Item key="body">Body</Item>
+              )}
             </TabList>
             <TabPanels>
               <Item key="queryParams">

@@ -30,7 +30,7 @@ const parseQueryParams = (setValue, v) => {
   });
 };
 
-export default function RequestSectionFields() {
+export default function RequestSectionFields({ onMethodUpdate }) {
   const { setValue, control } = useFormContext();
 
   return (
@@ -71,7 +71,10 @@ export default function RequestSectionFields() {
                   name: 'DELETE'
                 }
               ]}
-              onSelectionChange={onChange}
+              onSelectionChange={(v) => {
+                onChange(v);
+                onMethodUpdate(v);
+              }}
               onBlur={onBlur}
             >
               {(item) => <Item>{item.name}</Item>}

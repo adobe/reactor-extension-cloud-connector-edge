@@ -65,7 +65,7 @@ const ExtensionView = function ExtensionView({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...methods}
         >
-          <form>{render()}</form>
+          <form>{render(methods.watch())}</form>
           {/* <DisplayFormState /> */}
         </FormProvider>
       </ErrorBoundary>
