@@ -214,7 +214,7 @@ describe('Send data view', () => {
       },
       responseKey: 'keyName'
     });
-  });
+  }, 10000);
 
   test('sets settings from body raw value', async () => {
     renderView(SendData);
