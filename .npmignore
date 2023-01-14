@@ -5,5 +5,5 @@ createEntryFile.js
 adobe-reactor-extension-cloud-connector-edge-*.tgz
 coverage
 jest.config.js
-webpack.config.js
+webpack.config.mjs
 package-adobe-cloud-connector-*.zip
