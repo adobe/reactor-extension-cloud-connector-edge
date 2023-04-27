@@ -88,7 +88,7 @@ export default function WrappedTextField({
                 onPress={openDataElementSelector(
                   supportDataElement,
                   value,
-                  reactFormOnChange
+                  onChange
                 )}
               >
                 <Data />
