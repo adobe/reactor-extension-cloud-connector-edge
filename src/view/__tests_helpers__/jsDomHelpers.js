@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -22,7 +21,6 @@ export const changePickerValue = async (pickerTrigger, value) => {
 
   await waitFor(() => {
     if (
-      // eslint-disable-next-line testing-library/no-node-access
       document.getElementById('root').getAttribute('aria-hidden') === 'true'
     ) {
       throw new Error('Picker value not changed yet');

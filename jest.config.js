@@ -30,11 +30,6 @@ module.exports = {
       displayName: 'test library modules',
       testEnvironment: 'node',
       modulePathIgnorePatterns: ['<rootDir>/src/view/']
-    },
-    {
-      displayName: 'lint',
-      runner: 'jest-runner-eslint',
-      testMatch: ['<rootDir>/src/**']
     }
   ],
 

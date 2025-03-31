@@ -24,13 +24,13 @@ export default (v) => {
 
     try {
       key = decodeURIComponent(key || '');
-    } catch (e) {
+    } catch {
       //do nothing
     }
 
     try {
       value = decodeURIComponent(value || '');
-    } catch (e) {
+    } catch {
       // do nothing
     }
 

@@ -64,7 +64,7 @@ export default function BodySectionFields() {
                 let variables = [];
                 try {
                   variables = addToVariablesFromEntity([], JSON.parse(bodyRaw));
-                } catch (e) {
+                } catch {
                   // Don't do anything
                 }
 

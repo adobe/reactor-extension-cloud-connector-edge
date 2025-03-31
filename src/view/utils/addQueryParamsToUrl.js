@@ -10,8 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-/* eslint-disable no-cond-assign */
-
 const tokenPattern = /{{([^}]+)}}/;
 
 const containsDataElementToken = (value) => tokenPattern.test(value);

@@ -9,8 +9,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-/* eslint-disable no-template-curly-in-string */
-
 import { screen, act } from '@testing-library/react';
 import renderView from '../../__tests_helpers__/renderView';
 import {

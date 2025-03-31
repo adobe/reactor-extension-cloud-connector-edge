@@ -9,8 +9,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { ActionButton, TextField } from '@adobe/react-spectrum';
