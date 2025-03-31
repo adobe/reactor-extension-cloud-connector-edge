@@ -15,6 +15,7 @@ import pluginJs from '@eslint/js';
 import globals from 'globals';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
+import * as reactHooks from 'eslint-plugin-react-hooks';
 
 export default defineConfig([
   globalIgnores(['*.css', '*.html', '*.styl']),
@@ -43,6 +44,11 @@ export default defineConfig([
   {
     files: ['src/view/**/*.{js,jsx}'],
     ...reactPlugin.configs.flat.recommended
+  },
+
+  {
+    files: ['src/view/**/*.{js,jsx}'],
+    ...reactHooks.configs['recommended-latest']
   },
 
   {

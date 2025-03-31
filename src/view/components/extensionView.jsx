@@ -46,6 +46,7 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
 
       validate: () => methods.trigger()
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return isInitialized ? (
