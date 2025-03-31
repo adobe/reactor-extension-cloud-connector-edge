@@ -10,20 +10,22 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+import { createRequire } from 'module';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-import extension from './extension.json' assert { type: 'json' };
 import camelCase from 'camelcase';
 import capitalize from 'capitalize';
 import createEntryFile from './createEntryFile.mjs';
 
+const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const entries = {};
 const plugins = [];
+const extension = require('./extension.json');
 
 export default (env, argv) => {
   // Each view becomes its own "app". These are automatically generated based on naming convention.
