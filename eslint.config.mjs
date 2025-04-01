@@ -10,15 +10,23 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import { defineConfig, globalIgnores } from 'eslint/config';
-import pluginJs from '@eslint/js';
 import globals from 'globals';
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginJs from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import reactPlugin from 'eslint-plugin-react';
-import * as reactHooks from 'eslint-plugin-react-hooks';
 
-export default defineConfig([
-  globalIgnores(['*.css', '*.html', '*.styl']),
+export default [
+  // 1. Global ignore patterns
+  {
+    ignores: ['node_modules/', 'dist/', '*.css', '*.html', '*.styl']
+  },
+
+  // 2. Core ESLint Recommended Rules
+  pluginJs.configs.recommended,
+
+  // 3. Prettier Plugin Configuration
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -31,6 +39,8 @@ export default defineConfig([
       'prettier/prettier': 'error'
     }
   },
+
+  // 4. Library Module Configuration
   {
     files: ['src/lib/**/*.{js,jsx}'],
     languageOptions: {
@@ -41,40 +51,65 @@ export default defineConfig([
     }
   },
 
+  // 5. React Plugin Configuration (new syntax)
   {
     files: ['src/view/**/*.{js,jsx}'],
-    ...reactPlugin.configs.flat.recommended
-  },
-
-  {
-    files: ['src/view/**/*.{js,jsx}'],
-    ...reactHooks.configs['recommended-latest']
-  },
-
-  {
-    files: ['src/view/**/*.{js,jsx}'],
-    settings: {
-      react: {
-        version: 'detect'
-      }
+    plugins: {
+      react: pluginReact
     },
     languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true // Enable JSX parsing
+        }
+      },
       globals: {
         ...globals.browser,
         ...globals.jest
       }
     },
+    settings: {
+      react: {
+        version: 'detect' // Automatically detect React version
+      }
+    },
     rules: {
-      'no-unused-vars': [
-        'error',
-        {
-          varsIgnorePattern: 'React'
-        }
-      ],
-      'react/prop-types': 0
+      ...pluginReact.configs.recommended.rules // Use React recommended rules
     }
   },
-  pluginJs.configs.recommended,
-  eslintPluginPrettierRecommended,
-  reactPlugin.configs.flat['jsx-runtime']
-]);
+
+  // 6. React Hooks Plugin Configuration
+  {
+    files: ['src/view/**/*.{js,mjs,cjs,jsx}'], // Apply to JS/JSX files
+    plugins: {
+      'react-hooks': pluginReactHooks
+    },
+    rules: {
+      ...pluginReactHooks.configs.recommended.rules // Use React Hooks recommended rules
+    }
+  },
+
+  // 7. JSX Accessibility Plugin Configuration
+  {
+    files: ['src/view/**/*.{js,jsx}'], // Apply to JS/JSX files
+    plugins: {
+      'jsx-a11y': pluginJsxA11y
+    },
+    rules: {
+      ...pluginJsxA11y.configs.recommended.rules // Use Accessibility recommended rules
+    }
+  },
+
+  // 8. Custom Rules / Overrides (optional)
+  {
+    rules: {
+      // Example: enforce semicolons
+      // "semi": ["error", "always"],
+      // Example: prefer const over let
+      // "prefer-const": "error"
+      'react/prop-types': 'off'
+    }
+  },
+
+  eslintPluginPrettierRecommended
+];
