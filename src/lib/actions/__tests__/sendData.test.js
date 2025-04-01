@@ -140,4 +140,27 @@ describe('Send data library module', () => {
       });
     });
   });
+
+  test('makes an MTLS fetch call to the provided url', () => {
+    const mtlsFetch = jest.fn(() => Promise.resolve({}));
+
+    const settings = {
+      method: 'GET',
+      url: 'http://www.someurl.com?a=1&b=2',
+      useMtls: true
+    };
+
+    const utils = {
+      mtlsFetch,
+      getSettings: () => settings
+    };
+
+    return sendData({ arc, utils }).then(() => {
+      expect(mtlsFetch).toHaveBeenCalledWith('http://www.someurl.com?a=1&b=2', {
+        method: 'GET',
+        body: undefined,
+        headers: {}
+      });
+    });
+  });
 });

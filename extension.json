@@ -2,7 +2,7 @@
   "displayName": "Adobe Cloud Connector",
   "name": "adobe-cloud-connector",
   "iconPath": "resources/icons/cloud-connector.svg",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Extension that allows users to send data to 3rd party external sources.",
   "author": {
     "name": "Adobe Systems",
@@ -61,6 +61,9 @@
           "responseKey": {
             "type": "string",
             "minLength": 1
+          },
+          "useMtls": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false,

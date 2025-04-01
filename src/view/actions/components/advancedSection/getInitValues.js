@@ -13,9 +13,11 @@ governing permissions and limitations under the License.
 export default ({ settings }) => {
   const responseKey = settings?.responseKey || '';
   const saveResponse = Boolean(responseKey);
+  const useMtls = settings?.useMtls || false;
 
   return {
     saveResponse,
-    responseKey
+    responseKey,
+    useMtls
   };
 };

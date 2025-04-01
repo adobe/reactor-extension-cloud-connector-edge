@@ -25,9 +25,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import WrappedTextField from '../../../components/wrappedTextField';
 
 export default function AdvancedSectionFields() {
+  const [showResponseField, setShowResponseField] = useState();
   const { watch, control } = useFormContext();
   const { saveResponse, responseKey } = watch();
-  const [showResponseField, setShowResponseField] = useState();
 
   useEffect(() => {
     setShowResponseField(saveResponse);
@@ -73,6 +73,24 @@ export default function AdvancedSectionFields() {
           </TooltipTrigger>
         </Flex>
       )}
+
+      <br />
+
+      <Controller
+        control={control}
+        name="useMtls"
+        defaultValue=""
+        render={({ field: { onChange, onBlur, value, ref } }) => (
+          <Checkbox
+            onBlur={onBlur}
+            onChange={onChange}
+            isSelected={value}
+            inputRef={ref}
+          >
+            Use MTLS
+          </Checkbox>
+        )}
+      />
     </View>
   );
 }

@@ -15,13 +15,15 @@ const byteArrayToString = (buf) =>
 
 module.exports = ({
   arc: { ruleStash = {} },
-  utils: { fetch, getSettings }
+  utils: { fetch, mtlsFetch, getSettings }
 }) => {
   let headers = {};
 
   const settings = getSettings();
   const { url, headers: settingsHeaders, method, responseKey } = settings;
-  let { body } = settings;
+  let { body, useMtls = false } = settings;
+
+  const fetchFunction = useMtls ? mtlsFetch : fetch;
 
   if (settingsHeaders && settingsHeaders.length > 0) {
     headers = settingsHeaders.reduce((accumulator, o) => {
@@ -40,7 +42,7 @@ module.exports = ({
     headers
   };
 
-  return fetch(url, fetchOptions).then((r) => {
+  return fetchFunction(url, fetchOptions).then((r) => {
     const accRuleStash = ruleStash['adobe-cloud-connector'] || {
       responses: {}
     };
