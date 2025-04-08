@@ -14,9 +14,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { View } from '@adobe/react-spectrum';
 import ErrorBoundary from './errorBoundary';
+import { updateFetchSettings } from '../utils/fetch';
 // import DisplayFormState from './displayFormState';
 
 const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
+  const [initId, setInitId] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const methods = useForm({
@@ -29,12 +31,21 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
     let initInfo;
 
     window.extensionBridge.register({
-      init: (_initInfo = {}) => {
+      init: async (_initInfo = {}) => {
         setIsInitialized(false);
 
         initInfo = _initInfo;
-        methods.reset(getInitialValues({ initInfo }));
 
+        updateFetchSettings({
+          apiEndpoint: initInfo.apiEndpoints?.reactor,
+          imsOrgId: initInfo.company.orgId,
+          token: initInfo.tokens.imsAccess,
+          propertyId: initInfo.propertySettings.id
+        });
+
+        methods.reset(await getInitialValues({ initInfo }));
+
+        setInitId((id) => id + 1);
         setIsInitialized(true);
       },
 
@@ -50,7 +61,7 @@ const ExtensionView = ({ getInitialValues, getSettings, validate, render }) => {
   }, []);
 
   return isInitialized ? (
-    <View margin="size-200">
+    <View margin="size-200" key={initId}>
       <ErrorBoundary>
         <FormProvider {...methods}>
           <form>{render(methods.watch())}</form>

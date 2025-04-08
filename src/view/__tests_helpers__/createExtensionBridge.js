@@ -16,17 +16,38 @@ export default () => {
     register(options) {
       registeredOptions = options;
     },
-    init(...args) {
-      return registeredOptions.init.apply(this, args);
+
+    async init(initInfo) {
+      initInfo = {
+        company: { orgId: 'ORG_ID' },
+        tokens: { imsAccess: 'IMS_ACCESS' },
+        propertySettings: { id: 'PROPERTY_ID' },
+        ...initInfo
+      };
+
+      await registeredOptions.init.apply(this, [initInfo]);
     },
-    validate(...args) {
-      return registeredOptions.validate.apply(this, args);
+    async validate(...args) {
+      let validationResult;
+      validationResult = await registeredOptions.validate.apply(this, args);
+
+      return validationResult;
     },
+
     getSettings(...args) {
       return registeredOptions.getSettings.apply(this, args);
     },
-    openCodeEditor() {},
+
+    openCodeEditor({ code }) {
+      return Promise.resolve(`${code} + modified code`);
+    },
+
     openRegexTester() {},
-    openDataElementSelector() {}
+
+    openDataElementSelector({ tokenize }) {
+      return Promise.resolve(
+        tokenize ? '%data element name%' : 'data element name'
+      );
+    }
   };
 };

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
+Copyright 2025 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,21 +10,22 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-export default ({
-  settings,
-  company: { orgId: companyId },
-  propertySettings: { id: propertyId },
-  tokens: { imsAccess: accessToken }
-}) => {
-  const responseKey = settings?.responseKey || '';
-  const saveResponse = Boolean(responseKey);
-  const useMtls = settings?.useMtls || false;
-  const organizationData = { companyId, propertyId, accessToken };
+import fetch, { getFetchSettings } from '../../../../utils/fetch';
 
-  return {
-    saveResponse,
-    responseKey,
-    useMtls,
-    organizationData
-  };
+export default async () => {
+  const { propertyId } = getFetchSettings();
+
+  const url =
+    `/properties/${propertyId}/` +
+    'environments?page[size]=999&page[number]=1&filter[environment_id]=NOT%20null&include=adobe_certificate';
+
+  try {
+    return await fetch(url);
+  } catch (e) {
+    if (e instanceof TypeError) {
+      throw new Error(`${e.message} when loading ${url}`);
+    } else {
+      throw e;
+    }
+  }
 };

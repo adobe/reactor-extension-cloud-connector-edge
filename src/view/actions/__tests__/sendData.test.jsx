@@ -21,14 +21,336 @@ import SendData from '../sendData';
 import createExtensionBridge from '../../__tests_helpers__/createExtensionBridge';
 
 let extensionBridge;
+let nativeFetch;
 
 beforeEach(() => {
+  nativeFetch = window.fetch;
+
+  window.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: [
+            {
+              id: 'ENced3ee3ef1504a758fc26ea34b604996',
+              type: 'environments',
+              attributes: {
+                archive: false,
+                created_at: '2022-06-02T22:00:24.187Z',
+                library_path: 'b1aafd45ccc1/633b0e550bf6',
+                library_name: 'launch-a95bf55ef64e.min.js',
+                library_entry_points: [
+                  {
+                    library_name: 'launch-a95bf55ef64e.min.js',
+                    minified: true,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-a95bf55ef64e.min.js'
+                    ],
+                    license_path:
+                      'b1aafd45ccc1/633b0e550bf6/launch-a95bf55ef64e.js'
+                  },
+                  {
+                    library_name: 'launch-a95bf55ef64e.js',
+                    minified: false,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-a95bf55ef64e.js'
+                    ]
+                  }
+                ],
+                name: 'Production',
+                path: null,
+                stage: 'production',
+                updated_at: '2025-04-08T15:22:27.320Z',
+                status: 'succeeded',
+                token: 'a95bf55ef64e',
+                created_by_email: 'ciltaru@adobe.com',
+                created_by_display_name: 'George Ciltaru',
+                updated_by_email: 'ciltaru@adobe.com',
+                updated_by_display_name: 'George Ciltaru',
+                unapplied_changes: false
+              },
+              relationships: {
+                library: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/library'
+                  },
+                  data: null
+                },
+                adobe_certificate: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/adobe_certificate',
+                    self: 'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/relationships/adobe_certificate'
+                  },
+                  data: null
+                },
+                builds: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/builds'
+                  }
+                },
+                host: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/host',
+                    self: 'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/relationships/host'
+                  },
+                  data: {
+                    id: 'HTd2ab639bc5734c02a5a259587f97a958',
+                    type: 'hosts'
+                  }
+                },
+                property: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996/property'
+                  },
+                  data: {
+                    id: 'PR65e0646cad2346fdbd4bfb229532ac59',
+                    type: 'properties'
+                  }
+                }
+              },
+              links: {
+                property:
+                  'https://reactor-engd.adobe.io/properties/PR65e0646cad2346fdbd4bfb229532ac59',
+                self: 'https://reactor-engd.adobe.io/environments/ENced3ee3ef1504a758fc26ea34b604996'
+              },
+              meta: {
+                archive_encrypted: false
+              }
+            },
+            {
+              id: 'EN37a50054443e4d92867d38790b3432e5',
+              type: 'environments',
+              attributes: {
+                archive: false,
+                created_at: '2022-06-02T22:00:24.110Z',
+                library_path: 'b1aafd45ccc1/633b0e550bf6',
+                library_name: 'launch-2dcfa1835f39-staging.min.js',
+                library_entry_points: [
+                  {
+                    library_name: 'launch-2dcfa1835f39-staging.min.js',
+                    minified: true,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-2dcfa1835f39-staging.min.js'
+                    ],
+                    license_path:
+                      'b1aafd45ccc1/633b0e550bf6/launch-2dcfa1835f39-staging.js'
+                  },
+                  {
+                    library_name: 'launch-2dcfa1835f39-staging.js',
+                    minified: false,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-2dcfa1835f39-staging.js'
+                    ]
+                  }
+                ],
+                name: 'Staging',
+                path: null,
+                stage: 'staging',
+                updated_at: '2025-04-08T15:22:27.351Z',
+                status: 'succeeded',
+                token: '2dcfa1835f39',
+                created_by_email: 'ciltaru@adobe.com',
+                created_by_display_name: 'George Ciltaru',
+                updated_by_email: 'ciltaru@adobe.com',
+                updated_by_display_name: 'George Ciltaru',
+                unapplied_changes: false
+              },
+              relationships: {
+                library: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/library'
+                  },
+                  data: null
+                },
+                adobe_certificate: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/adobe_certificate',
+                    self: 'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/relationships/adobe_certificate'
+                  },
+                  data: null
+                },
+                builds: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/builds'
+                  }
+                },
+                host: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/host',
+                    self: 'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/relationships/host'
+                  },
+                  data: {
+                    id: 'HTd2ab639bc5734c02a5a259587f97a958',
+                    type: 'hosts'
+                  }
+                },
+                property: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5/property'
+                  },
+                  data: {
+                    id: 'PR65e0646cad2346fdbd4bfb229532ac59',
+                    type: 'properties'
+                  }
+                }
+              },
+              links: {
+                property:
+                  'https://reactor-engd.adobe.io/properties/PR65e0646cad2346fdbd4bfb229532ac59',
+                self: 'https://reactor-engd.adobe.io/environments/EN37a50054443e4d92867d38790b3432e5'
+              },
+              meta: {
+                archive_encrypted: false
+              }
+            },
+            {
+              id: 'EN341385718d3b4007ac810d2313b891d3',
+              type: 'environments',
+              attributes: {
+                archive: false,
+                created_at: '2022-06-02T22:00:24.033Z',
+                library_path: 'b1aafd45ccc1/633b0e550bf6',
+                library_name: 'launch-0cafd3aaa980-development.min.js',
+                library_entry_points: [
+                  {
+                    library_name: 'launch-0cafd3aaa980-development.min.js',
+                    minified: true,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-0cafd3aaa980-development.min.js'
+                    ],
+                    license_path:
+                      'b1aafd45ccc1/633b0e550bf6/launch-0cafd3aaa980-development.js'
+                  },
+                  {
+                    library_name: 'launch-0cafd3aaa980-development.js',
+                    minified: false,
+                    references: [
+                      'b1aafd45ccc1/633b0e550bf6/launch-0cafd3aaa980-development.js'
+                    ]
+                  }
+                ],
+                name: 'Development',
+                path: null,
+                stage: 'development',
+                updated_at: '2025-04-08T15:36:59.406Z',
+                status: 'succeeded',
+                token: '0cafd3aaa980',
+                created_by_email: 'ciltaru@adobe.com',
+                created_by_display_name: 'George Ciltaru',
+                updated_by_email: 'roan@adobe.com',
+                updated_by_display_name: 'spencer roan',
+                unapplied_changes: false
+              },
+              relationships: {
+                library: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/library'
+                  },
+                  data: {
+                    id: 'LB1f577734809747b49a5f828f09cba2b8',
+                    type: 'libraries'
+                  }
+                },
+                adobe_certificate: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/adobe_certificate',
+                    self: 'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/relationships/adobe_certificate'
+                  },
+                  data: {
+                    id: 'CE5bf4cd1dd96c411db1f1f47bf72ab5e1',
+                    type: 'certificates'
+                  }
+                },
+                builds: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/builds'
+                  }
+                },
+                host: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/host',
+                    self: 'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/relationships/host'
+                  },
+                  data: {
+                    id: 'HTd2ab639bc5734c02a5a259587f97a958',
+                    type: 'hosts'
+                  }
+                },
+                property: {
+                  links: {
+                    related:
+                      'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3/property'
+                  },
+                  data: {
+                    id: 'PR65e0646cad2346fdbd4bfb229532ac59',
+                    type: 'properties'
+                  }
+                }
+              },
+              links: {
+                property:
+                  'https://reactor-engd.adobe.io/properties/PR65e0646cad2346fdbd4bfb229532ac59',
+                self: 'https://reactor-engd.adobe.io/environments/EN341385718d3b4007ac810d2313b891d3'
+              },
+              meta: {
+                archive_encrypted: false
+              }
+            }
+          ],
+          included: [
+            {
+              id: 'CE5bf4cd1dd96c411db1f1f47bf72ab5e1',
+              type: 'certificates',
+              attributes: {
+                created_at: '2025-04-04T21:46:53.286Z',
+                expires_at: '2026-04-28T23:59:59.000Z',
+                display_name: 'Adobe Development Certificate',
+                stage: 'development',
+                status: 'current',
+                variable_name: 'ADOBE_MTLS_CERTIFICATE',
+                version: 'a5fe5c03dbd346d3827e07b7fe76d1a3',
+                updated_at: '2025-04-04T21:46:54.120Z'
+              },
+              links: {
+                self: 'https://reactor-engd.adobe.io/certificates/CE5bf4cd1dd96c411db1f1f47bf72ab5e1'
+              }
+            }
+          ],
+          meta: {
+            pagination: {
+              current_page: 1,
+              next_page: null,
+              prev_page: null,
+              total_pages: 1,
+              total_count: 3
+            }
+          }
+        })
+    })
+  );
+
   extensionBridge = createExtensionBridge();
   window.extensionBridge = extensionBridge;
 });
 
 afterEach(() => {
   delete window.extensionBridge;
+  window.fetch = nativeFetch;
 });
 
 const getTextFieldByLabel = (label) => screen.getByLabelText(label);
@@ -58,7 +380,7 @@ describe('Send data view', () => {
     renderView(SendData);
 
     await act(async () => {
-      extensionBridge.init({
+      await extensionBridge.init({
         settings: {
           method: 'POST',
           url: 'http://www.google.com?a=b',

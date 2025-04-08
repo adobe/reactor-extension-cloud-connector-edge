@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
+Copyright 2025 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,21 +10,14 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-export default ({
-  settings,
-  company: { orgId: companyId },
-  propertySettings: { id: propertyId },
-  tokens: { imsAccess: accessToken }
-}) => {
-  const responseKey = settings?.responseKey || '';
-  const saveResponse = Boolean(responseKey);
-  const useMtls = settings?.useMtls || false;
-  const organizationData = { companyId, propertyId, accessToken };
+import { UI_PRODUCTION_URL, UI_STAGE_URL } from './constants';
+import getEnvironment from './getEnvironment';
 
-  return {
-    saveResponse,
-    responseKey,
-    useMtls,
-    organizationData
-  };
+export default ({ environmentId }, { companyId, propertyId, accessToken }) => {
+  const baseUrl =
+    getEnvironment(accessToken) === 'staging'
+      ? UI_STAGE_URL
+      : UI_PRODUCTION_URL;
+
+  return `${baseUrl}/companies/${companyId}/properties/${propertyId}/environments/${environmentId}`;
 };

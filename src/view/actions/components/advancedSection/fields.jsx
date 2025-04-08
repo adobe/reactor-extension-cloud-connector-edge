@@ -18,20 +18,71 @@ import {
   ActionButton,
   Tooltip,
   Flex,
-  View
+  View,
+  TableView,
+  TableHeader,
+  TableBody,
+  Column,
+  Row,
+  Cell,
+  Link
 } from '@adobe/react-spectrum';
 import Info from '@spectrum-icons/workflow/Info';
 import { Controller, useFormContext } from 'react-hook-form';
 import WrappedTextField from '../../../components/wrappedTextField';
+import loadCertificates from './api/loadCertificates';
+import {
+  CERTIFICATE_TYPE,
+  COLUMN_CERTIFICATE_STATUS,
+  COLUMN_ENVIRONMENT
+} from '../../../utils/constants';
+import generateEnvironmentUrl from '../../../utils/generateEnvironmentUrl';
+
+let certificateTableColumns = [
+  { name: 'Environment', uid: COLUMN_ENVIRONMENT },
+  { name: 'Status', uid: COLUMN_CERTIFICATE_STATUS }
+];
 
 export default function AdvancedSectionFields() {
-  const [showResponseField, setShowResponseField] = useState();
+  const [showResponseField, setShowResponseField] = useState(false);
+  const [certificateTableData, setCertificateTableData] = useState(null);
+
   const { watch, control } = useFormContext();
-  const { saveResponse, responseKey } = watch();
+  const { saveResponse, responseKey, useMtls, organizationData } = watch();
 
   useEffect(() => {
     setShowResponseField(saveResponse);
   }, [saveResponse]);
+
+  useEffect(() => {
+    let id = 0;
+
+    loadCertificates()
+      .then((result) => {
+        const availableCertificates = result.included.reduce((acc, curr) => {
+          if (curr.type === CERTIFICATE_TYPE) {
+            acc[curr.id] = curr.attributes;
+          }
+
+          return acc;
+        }, {});
+
+        const certificatesStatusByEnvironment = result.data.map((item) => ({
+          id: id++,
+          environmentId: item.id,
+          [COLUMN_ENVIRONMENT]: item.attributes.name,
+          [COLUMN_CERTIFICATE_STATUS]:
+            availableCertificates[
+              item?.relationships?.adobe_certificate?.data?.id
+            ]?.status || 'n / a'
+        }));
+
+        setCertificateTableData(certificatesStatusByEnvironment);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
 
   return (
     <View marginTop="size-200">
@@ -87,10 +138,42 @@ export default function AdvancedSectionFields() {
             isSelected={value}
             inputRef={ref}
           >
-            Use MTLS
+            Enable mTLS
           </Checkbox>
         )}
       />
+
+      {useMtls && certificateTableData && (
+        <TableView
+          aria-label="Example table with dynamic content"
+          maxWidth="size-6000"
+        >
+          <TableHeader columns={certificateTableColumns}>
+            {(column) => <Column key={column.uid}>{column.name}</Column>}
+          </TableHeader>
+          <TableBody items={certificateTableData}>
+            {(item) => (
+              <Row>
+                {(columnKey) => {
+                  if (columnKey === COLUMN_ENVIRONMENT) {
+                    return (
+                      <Cell>
+                        <Link
+                          href={generateEnvironmentUrl(item, organizationData)}
+                          target="_blank"
+                        >
+                          {item[columnKey]}
+                        </Link>
+                      </Cell>
+                    );
+                  }
+                  return <Cell>{item[columnKey]}</Cell>;
+                }}
+              </Row>
+            )}
+          </TableBody>
+        </TableView>
+      )}
     </View>
   );
 }
