@@ -59,13 +59,16 @@ export default function AdvancedSectionFields() {
 
     loadCertificates()
       .then((result) => {
-        const availableCertificates = result.included.reduce((acc, curr) => {
-          if (curr.type === CERTIFICATE_TYPE) {
-            acc[curr.id] = curr.attributes;
-          }
+        const availableCertificates = (result?.included || []).reduce(
+          (acc, curr) => {
+            if (curr.type === CERTIFICATE_TYPE) {
+              acc[curr.id] = curr.attributes;
+            }
 
-          return acc;
-        }, {});
+            return acc;
+          },
+          {}
+        );
 
         const certificatesStatusByEnvironment = result.data.map((item) => ({
           id: id++,
