@@ -1,6 +1,6 @@
 {
   "name": "@adobe/reactor-extension-cloud-connector-edge",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Adobe Experience Platform event forwarding extension to make fetch calls to third-party endpoints.",
   "author": {
     "name": "Adobe Systems",

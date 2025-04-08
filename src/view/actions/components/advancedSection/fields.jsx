@@ -49,7 +49,7 @@ let environmentOrder = [
 
 let certificateTableColumns = [
   { name: 'Environment', uid: COLUMN_ENVIRONMENT },
-  { name: 'Status', uid: COLUMN_CERTIFICATE_STATUS }
+  { name: 'Certificate Status', uid: COLUMN_CERTIFICATE_STATUS }
 ];
 
 export default function AdvancedSectionFields() {
