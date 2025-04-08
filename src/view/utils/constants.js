@@ -20,6 +20,6 @@ export const COLUMN_CERTIFICATE_STATUS = 'certificate_status';
 export const COLUMN_ENVIRONMENT = 'environment';
 
 export const UI_PRODUCTION_URL =
-  'https://experience.adobe.com/data-collection/eventForwarding/';
+  'https://experience.adobe.com/data-collection/eventForwarding';
 export const UI_STAGE_URL =
-  'https://experience-stage.adobe.com/data-collection/eventForwarding/';
+  'https://experience-stage.adobe.com/data-collection/eventForwarding';
