@@ -23,3 +23,7 @@ export const UI_PRODUCTION_URL =
   'https://experience.adobe.com/data-collection/eventForwarding';
 export const UI_STAGE_URL =
   'https://experience-stage.adobe.com/data-collection/eventForwarding';
+
+export const ENVIRONMENT_DEVELOPMENT = 'development';
+export const ENVIRONMENT_STAGE = 'stage';
+export const ENVIRONMENT_PRODUCTION = 'production';

@@ -37,7 +37,8 @@ beforeEach(() => {
               type: 'environments',
               attributes: {
                 name: 'Production',
-                status: 'succeeded'
+                status: 'succeeded',
+                stage: 'production'
               },
               relationships: {
                 adobe_certificate: {
@@ -55,7 +56,8 @@ beforeEach(() => {
               type: 'environments',
               attributes: {
                 name: 'Staging',
-                status: 'succeeded'
+                status: 'succeeded',
+                stage: 'staging'
               }
             },
             {
@@ -63,7 +65,8 @@ beforeEach(() => {
               type: 'environments',
               attributes: {
                 name: 'Development',
-                status: 'succeeded'
+                status: 'succeeded',
+                stage: 'development'
               }
             }
           ],

@@ -34,9 +34,18 @@ import loadCertificates from './api/loadCertificates';
 import {
   CERTIFICATE_TYPE,
   COLUMN_CERTIFICATE_STATUS,
-  COLUMN_ENVIRONMENT
+  COLUMN_ENVIRONMENT,
+  ENVIRONMENT_DEVELOPMENT,
+  ENVIRONMENT_STAGE,
+  ENVIRONMENT_PRODUCTION
 } from '../../../utils/constants';
 import generateEnvironmentUrl from '../../../utils/generateEnvironmentUrl';
+
+let environmentOrder = [
+  ENVIRONMENT_DEVELOPMENT,
+  ENVIRONMENT_STAGE,
+  ENVIRONMENT_PRODUCTION
+];
 
 let certificateTableColumns = [
   { name: 'Environment', uid: COLUMN_ENVIRONMENT },
@@ -70,15 +79,21 @@ export default function AdvancedSectionFields() {
           {}
         );
 
-        const certificatesStatusByEnvironment = result.data.map((item) => ({
-          id: id++,
-          environmentId: item.id,
-          [COLUMN_ENVIRONMENT]: item.attributes.name,
-          [COLUMN_CERTIFICATE_STATUS]:
-            availableCertificates[
-              item?.relationships?.adobe_certificate?.data?.id
-            ]?.status || 'n / a'
-        }));
+        const certificatesStatusByEnvironment = result.data
+          .sort((a, b) => {
+            const aIndex = environmentOrder.indexOf(a.attributes.stage);
+            const bIndex = environmentOrder.indexOf(b.attributes.stage);
+            return aIndex - bIndex;
+          })
+          .map((item) => ({
+            id: id++,
+            environmentId: item.id,
+            [COLUMN_ENVIRONMENT]: item.attributes.name,
+            [COLUMN_CERTIFICATE_STATUS]:
+              availableCertificates[
+                item?.relationships?.adobe_certificate?.data?.id
+              ]?.status || 'n / a'
+          }));
 
         setCertificateTableData(certificatesStatusByEnvironment);
       })
