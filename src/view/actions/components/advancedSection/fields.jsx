@@ -36,14 +36,14 @@ import {
   COLUMN_CERTIFICATE_STATUS,
   COLUMN_ENVIRONMENT,
   ENVIRONMENT_DEVELOPMENT,
-  ENVIRONMENT_STAGE,
+  ENVIRONMENT_STAGING,
   ENVIRONMENT_PRODUCTION
 } from '../../../utils/constants';
 import generateEnvironmentUrl from '../../../utils/generateEnvironmentUrl';
 
 let environmentOrder = [
   ENVIRONMENT_DEVELOPMENT,
-  ENVIRONMENT_STAGE,
+  ENVIRONMENT_STAGING,
   ENVIRONMENT_PRODUCTION
 ];
 
