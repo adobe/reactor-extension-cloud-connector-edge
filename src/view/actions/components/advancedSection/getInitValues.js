@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 export default ({
   settings,
-  company: { orgId: companyId },
+  company: { id: companyId },
   propertySettings: { id: propertyId },
   tokens: { imsAccess: accessToken }
 }) => {
